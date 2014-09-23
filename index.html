@@ -2,9 +2,11 @@
 <html>
 <head>
     <title>beerpongJs</title>
+    <meta charset="utf-8"/>
     <script src="libs/three.js"></script>
     <script src="libs/stats.min.js"></script>
     <script src="libs/OrbitControls.js"></script>
+    <script src="libs/ColladaLoader.js"></script>
 
     <style>
         body {
@@ -15,12 +17,14 @@
 </head>
 <body>
 <script>
-
+    
+    var loader = new THREE.ColladaLoader();
     var renderer;
     var scene;
     var camera;
     var cameraControl;
     var stats;
+    var plane;
 
     function init() {
         scene = new THREE.Scene();
@@ -28,15 +32,14 @@
         
         var planeGeometry = new THREE.PlaneGeometry(30,30*2.4);
         var planeMaterial = new THREE.MeshLambertMaterial({color: 'white'});
-        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+        plane = new THREE.Mesh(planeGeometry,planeMaterial);
         plane.receiveShadow = true;
 
         plane.position.x = 0;
         plane.position.y = 0;
         plane.position.z = 0;
-        scene.add(plane);
 
-        var ambientLight = new THREE.AmbientLight(0xffffff);
+        var ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
 
         renderer = new THREE.WebGLRenderer();
@@ -48,13 +51,44 @@
         camera.position.y = -60;
         camera.position.z = 20;
         camera.lookAt(scene.position); 
-        cameraControl = new THREE.OrbitControls(camera);      
+        cameraControl = new THREE.OrbitControls(camera); 
 
-        document.body.appendChild(renderer.domElement);
+        addTray(-30,0);
+        addTray(30,Math.PI);
+
+        scene.add(plane);
 
         addStatsObject();
-
+        document.body.appendChild(renderer.domElement);
         render();
+    }
+
+    function addCupOnPlane(tray){        
+        var positionCup = [{x:0,y:0},{x:-2,y:-3},{x:2,y:-3},{x:-6,y:-3},{x:6,y:-3},{x:-4,y:0},{x:4,y:0},{x:-2,y:3},{x:2,y:3},{x:0,y:6}];
+        for (var i=0; i<positionCup.length; i++){
+            loader.options.convertUpAxis = true;
+            loader.load('assets/collada/plasticcup.dae', function(collada){                
+                var dae = collada.scene;
+                var skin = collada.skins[0];                
+                
+                dae.position.set(positionCup[i].x,positionCup[i].y,0);
+                dae.scale.set(1.5,1.5,1.5);
+                dae.rotation.x = 0.5 * Math.PI;
+                tray.add(dae);
+            });
+        }
+    }
+
+    function addTray(y,rotation){
+        var planeGeometry = new THREE.PlaneGeometry(1,1);
+        var planeMaterial = new THREE.MeshLambertMaterial({opacity:0.0, color: 'white'});
+        var tray = new THREE.Mesh(planeGeometry,planeMaterial);
+        tray.position.x = 0;
+        tray.position.y = y;
+        tray.position.z = 0;
+        tray.rotation.z = rotation;
+        addCupOnPlane(tray);
+        plane.add(tray);
     }
 
     function render() {
