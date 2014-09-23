@@ -4,6 +4,7 @@
     <title>beerpongJs</title>
     <meta charset="utf-8"/>
     <script src="libs/three.js"></script>
+    <script src="libs/physi.js"></script>
     <script src="libs/stats.min.js"></script>
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
@@ -17,6 +18,10 @@
 </head>
 <body>
 <script>
+    'use strict';
+
+    Physijs.scripts.worker = 'libs/physijs_worker.js';
+    Physijs.scripts.ammo = 'ammo.js';
     
     var loader = new THREE.ColladaLoader();
     var renderer;
@@ -27,7 +32,7 @@
     var plane;
 
     function init() {
-        scene = new THREE.Scene();
+        scene = new Physijs.Scene;
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         
         var planeGeometry = new THREE.PlaneGeometry(30,30*2.4);
@@ -48,14 +53,22 @@
         renderer.shadowMapEnabled = true;
 
         camera.position.x = 0;
-        camera.position.y = -60;
-        camera.position.z = 20;
+        camera.position.y = 0;
+        camera.position.z = 100;
         camera.lookAt(scene.position); 
         cameraControl = new THREE.OrbitControls(camera); 
 
         addTray(-30,0);
         addTray(30,Math.PI);
-
+        
+        var radius = 1,
+            segments = 16,
+            rings = 10;
+            
+        var sphere = new Physijs.BoxMesh(new THREE.SphereGeometry(radius,segments,rings), new THREE.MeshLambertMaterial({color: 0xffffff }));
+        sphere.position.z = 10;
+        scene.add(sphere);
+        
         scene.add(plane);
 
         addStatsObject();
@@ -92,6 +105,7 @@
     }
 
     function render() {
+        scene.simulate();
         stats.update();
         cameraControl.update();
         requestAnimationFrame(render);
