@@ -37,12 +37,13 @@
         
         var planeGeometry = new THREE.PlaneGeometry(30,30*2.4);
         var planeMaterial = new THREE.MeshLambertMaterial({color: 'white'});
-        plane = new THREE.Mesh(planeGeometry,planeMaterial);
+        plane = new Physijs.BoxMesh(planeGeometry,planeMaterial);
         plane.receiveShadow = true;
 
         plane.position.x = 0;
         plane.position.y = 0;
-        plane.position.z = 0;
+        plane.position.z = -12;
+        plane.rotation.x = -0.5 * Math.PI;
 
         var ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
@@ -53,8 +54,8 @@
         renderer.shadowMapEnabled = true;
 
         camera.position.x = 0;
-        camera.position.y = 0;
-        camera.position.z = 100;
+        camera.position.y = 30;
+        camera.position.z = 50;
         camera.lookAt(scene.position); 
         cameraControl = new THREE.OrbitControls(camera); 
 
@@ -66,7 +67,7 @@
             rings = 10;
             
         var sphere = new Physijs.BoxMesh(new THREE.SphereGeometry(radius,segments,rings), new THREE.MeshLambertMaterial({color: 0xffffff }));
-        sphere.position.z = 10;
+        sphere.position.y = 20;
         scene.add(sphere);
         
         scene.add(plane);
