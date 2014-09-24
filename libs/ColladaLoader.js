@@ -985,14 +985,14 @@ THREE.ColladaLoader = function () {
 
 					material.morphTargets = true;
 
-					mesh = new THREE.Mesh( geom, material );
+					mesh = new Physijs.BoxMesh( geom, material );
 					mesh.name = 'morph_' + morphs.length;
 
 					morphs.push( mesh );
 
 				} else {
 
-					mesh = new THREE.Mesh( geom, material );
+					mesh = new Physijs.BoxMesh( geom, material );
 					// mesh.geom.name = geometry.id;
 
 				}

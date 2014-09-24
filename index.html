@@ -37,16 +37,17 @@
         
         var planeGeometry = new THREE.PlaneGeometry(30,30*2.4);
         var planeMaterial = new THREE.MeshLambertMaterial({color: 'white'});
-        plane = new Physijs.BoxMesh(planeGeometry,planeMaterial);
+        plane = new Physijs.PlaneMesh(planeGeometry,planeMaterial);
         plane.receiveShadow = true;
 
         plane.position.x = 0;
         plane.position.y = 0;
         plane.position.z = -12;
-        plane.rotation.x = -0.5 * Math.PI;
+        plane.rotation.x = -0.4 * Math.PI;
 
-        var ambientLight = new THREE.AmbientLight(0x404040);
-        scene.add(ambientLight);
+        var spotLight = new THREE.SpotLight(0x404040);
+        spotLight.position.set(0, 70, 30);
+        scene.add(spotLight);
 
         renderer = new THREE.WebGLRenderer();
         renderer.setClearColor(0xc0c0c0, 1.0);
@@ -59,15 +60,12 @@
         camera.lookAt(scene.position); 
         cameraControl = new THREE.OrbitControls(camera); 
 
-        addTray(-30,0);
-        addTray(30,Math.PI);
-        
-        var radius = 1,
-            segments = 16,
-            rings = 10;
+        addTray(-30, 0);
+        addTray(30, Math.PI);       
             
-        var sphere = new Physijs.BoxMesh(new THREE.SphereGeometry(radius,segments,rings), new THREE.MeshLambertMaterial({color: 0xffffff }));
+        var sphere = new Physijs.BoxMesh(new THREE.SphereGeometry(0.6,32,32), new THREE.MeshLambertMaterial({color: 0xffffff }));
         sphere.position.y = 20;
+        
         scene.add(sphere);
         
         scene.add(plane);
@@ -76,9 +74,10 @@
         document.body.appendChild(renderer.domElement);
         render();
     }
+    
+    var positionCup = [{x:0,y:0},{x:-2,y:-3},{x:2,y:-3},{x:-6,y:-3},{x:6,y:-3},{x:-4,y:0},{x:4,y:0},{x:-2,y:3},{x:2,y:3},{x:0,y:6}];
 
-    function addCupOnPlane(tray){        
-        var positionCup = [{x:0,y:0},{x:-2,y:-3},{x:2,y:-3},{x:-6,y:-3},{x:6,y:-3},{x:-4,y:0},{x:4,y:0},{x:-2,y:3},{x:2,y:3},{x:0,y:6}];
+    function addCupOnPlane(tray){                
         for (var i=0; i<positionCup.length; i++){
             loader.options.convertUpAxis = true;
             loader.load('assets/collada/plasticcup.dae', function(collada){                
@@ -86,7 +85,7 @@
                 var skin = collada.skins[0];                
                 
                 dae.position.set(positionCup[i].x,positionCup[i].y,0);
-                dae.scale.set(1.5,1.5,1.5);
+                dae.scale.set(1.5, 1.5, 1.5);
                 dae.rotation.x = 0.5 * Math.PI;
                 tray.add(dae);
             });
@@ -96,13 +95,30 @@
     function addTray(y,rotation){
         var planeGeometry = new THREE.PlaneGeometry(1,1);
         var planeMaterial = new THREE.MeshLambertMaterial({opacity:0.0, color: 'white'});
-        var tray = new THREE.Mesh(planeGeometry,planeMaterial);
+        var tray = new Physijs.PlaneMesh(planeGeometry,planeMaterial);
         tray.position.x = 0;
         tray.position.y = y;
         tray.position.z = 0;
         tray.rotation.z = rotation;
         addCupOnPlane(tray);
+        
+        for (var i = 0; i < positionCup.length; i++){
+            tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y + 1.5, 0.5 * Math.PI, 0));                     
+            tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y - 1.5, 0.5 * Math.PI, 0));            
+            tray.add(createAndPositionMiniWall(positionCup[i].x + 1.5, positionCup[i].y, 0, 0.5 * Math.PI));            
+            tray.add(createAndPositionMiniWall(positionCup[i].x - 1.5, positionCup[i].y, 0, 0.5 * Math.PI));
+        }
         plane.add(tray);
+    }
+    
+    function createAndPositionMiniWall(x, y, rotationX, rotationY){
+        var miniGeometry = new THREE.PlaneGeometry(3,3);
+        var miniMaterial = new THREE.MeshLambertMaterial({transparent : true, color: 'red'});
+        var miniWall = new Physijs.BoxMesh(miniGeometry, miniMaterial, rotationX, rotationY);
+        miniWall.position.set(x, y, 1.5);
+        miniWall.rotation.x = rotationX;
+        miniWall.rotation.y = rotationY;
+        return miniWall;
     }
 
     function render() {
