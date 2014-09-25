@@ -113,7 +113,8 @@
     
     function createAndPositionMiniWall(x, y, rotationX, rotationY){
         var miniGeometry = new THREE.PlaneGeometry(3,3);
-        var miniMaterial = new THREE.MeshLambertMaterial({transparent : true, color: 'red'});
+        var miniTexture = THREE.ImageUtils.loadTexture("assets/img/transparent.png");
+        var miniMaterial = new THREE.MeshBasicMaterial({map:miniTexture, transparent:true});
         var miniWall = new Physijs.BoxMesh(miniGeometry, miniMaterial, rotationX, rotationY);
         miniWall.position.set(x, y, 1.5);
         miniWall.rotation.x = rotationX;
