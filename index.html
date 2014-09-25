@@ -30,7 +30,8 @@
     var camera;
     var cameraControl;
     var stats;
-
+    var isPaused = true;
+    
     function init() {
         scene = new Physijs.Scene;
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -45,8 +46,10 @@
         render();
     }
 
-    function render() {
-        scene.simulate();
+    function render() {        
+        if(!isPaused){
+            scene.simulate();
+        }
         stats.update();
         cameraControl.update();
         requestAnimationFrame(render);
@@ -59,6 +62,24 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
     
+    function keyPressed(e) {
+	e = e || window.event;
+	
+	if (e.keyCode == '80') {
+	    isPaused = true;
+	}
+        
+        if (e.keyCode == '79') {
+	    isPaused = false;
+            scene.onSimulationResume();
+	}
+        
+        if (e.keyCode == '83') {
+	    sphere.setLinearVelocity({x: 0, y: 0, z: -40});
+	}
+    }
+    
+    window.onkeyup = keyPressed;
     window.onload = init;
     window.addEventListener('resize', handleResize, false);
 </script>

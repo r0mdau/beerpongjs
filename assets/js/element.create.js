@@ -1,5 +1,6 @@
 /* Variables globales pour ce fichier */
 var table;
+var sphere;
 var loader = new THREE.ColladaLoader();
 var positionCup = [{x:0,y:0},{x:-2,y:-3.5},{x:2,y:-3.5},{x:-6,y:-3.5},{x:6,y:-3.5},{x:-4,y:0},{x:4,y:0},{x:-2,y:3.5},{x:2,y:3.5},{x:0,y:7}];
 
@@ -14,7 +15,7 @@ function createScene(scene){
     );
     table.receiveShadow = true;
     table.position.set(0, 0, -12);
-    table.rotation.x = -0.43 * Math.PI;
+    table.rotation.x = -0.5 * Math.PI;
 
     var spotLight = new THREE.SpotLight(0x404040);
     spotLight.position.set(0, 70, 30);
@@ -28,11 +29,11 @@ function createScene(scene){
     table.add(createTrayWithCups(-30, 0));
     table.add(createTrayWithCups(30, Math.PI));
         
-    var sphere = new Physijs.BoxMesh(
+    sphere = new Physijs.BoxMesh(
         new THREE.SphereGeometry(0.6, 32, 32),
         new THREE.MeshLambertMaterial({color: 0xffffff})
     );
-    sphere.position.set(0, 20, 0);
+    sphere.position.set(0, 15, 20);
     scene.add(sphere);
     scene.add(table);
     
