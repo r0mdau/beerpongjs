@@ -8,8 +8,10 @@
     <script src="libs/stats.min.js"></script>
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
+	<script src="libs/jquery-1.11.1.min.js"></script>
     <script src="assets/js/element.create.js"></script>
     <script src="assets/js/stats.add.js"></script>
+	<script src="assets/js/keyup.js"></script>
 
     <style>
         body {
@@ -19,6 +21,12 @@
     </style>
 </head>
 <body>
+	<div id="control" style="position: absolute">
+		<p>Puissance :</p>
+		<input type="range" id="puissance" value="35" min="10" max="60"/>
+		<br/>
+		<input type="button" id="launch" value="Lancer"/>
+	</div>
 <script>
     'use strict';
 
@@ -31,57 +39,59 @@
     var cameraControl;
     var stats;
     var isPaused = true;
+	
+	var div = $('#control');
     
-    function init() {
+    $(document).ready(function() {
+		div.css({
+			"margin-left" : (window.innerWidth - div.width() - 10)+"px",
+			"margin-top" : (window.innerHeight - div.height() - 10)+"px",
+			"border-radius" : "10px",
+			"background-color" : "#ff6600"
+		})
+		
+		$('#launch').click(function(){
+			sphere.setLinearVelocity({x: 0, y: 2, z: -$('#puissance').val()});
+			unPause()
+		});
+		
         scene = new Physijs.Scene;
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set(0, 30, 50);
         camera.lookAt(scene.position); 
-        cameraControl = new THREE.OrbitControls(camera);
+        //cameraControl = new THREE.OrbitControls(camera);
         
         scene = createScene(scene);
         
         addStatsObject();
         document.body.appendChild(renderer.domElement);
         render();
-    }
+    });
 
     function render() {        
         if(!isPaused){
             scene.simulate();
         }
         stats.update();
-        cameraControl.update();
+        //cameraControl.update();
         requestAnimationFrame(render);
         renderer.render(scene, camera);
     }
-
-    function handleResize() {
+	
+	function unPause(){
+		isPaused = false;
+		scene.onSimulationResume();
+	}
+    
+    $(document).keypress(function(e) {
+		doThingsWhenMyKeyIsPressed(e);
+    });
+	
+	$(window).resize(function() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-    
-    function keyPressed(e) {
-	e = e || window.event;
-	
-	if (e.keyCode == '80') {
-	    isPaused = true;
-	}
-        
-        if (e.keyCode == '79') {
-	    isPaused = false;
-            scene.onSimulationResume();
-	}
-        
-        if (e.keyCode == '83') {
-	    sphere.setLinearVelocity({x: 0, y: 0, z: -40});
-	}
-    }
-    
-    window.onkeyup = keyPressed;
-    window.onload = init;
-    window.addEventListener('resize', handleResize, false);
+    });
 </script>
 </body>
 </html>

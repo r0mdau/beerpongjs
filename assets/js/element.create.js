@@ -33,11 +33,15 @@ function createScene(scene){
         new THREE.SphereGeometry(0.6, 32, 32),
         new THREE.MeshLambertMaterial({color: 0xffffff})
     );
-    sphere.position.set(0, 15, 20);
-    scene.add(sphere);
+    initSphere();    
     scene.add(table);
     
     return scene;
+}
+
+function initSphere(){    
+    sphere.position.set(0, 15, 20);
+    scene.add(sphere);
 }
 
 function addCupsOnTray(tray){    
