@@ -4,7 +4,7 @@ var sphere;
 var loader = new THREE.ColladaLoader();
 var positionCup = [{x:0,y:0},{x:-2,y:-3.5},{x:2,y:-3.5},{x:-6,y:-3.5},{x:6,y:-3.5},{x:-4,y:0},{x:4,y:0},{x:-2,y:3.5},{x:2,y:3.5},{x:0,y:7}];
 
-var MINIWALL_SIZE = 3.5;
+var MINIWALL_SIZE = 1.4;
 var TABLE_SIZE = 30;
 /* FIN Variables globales pour ce fichier */
 
@@ -63,6 +63,11 @@ function addMiniWallsOnTray(tray){
         tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y - 1.7, 0.5 * Math.PI, 0));            
         tray.add(createAndPositionMiniWall(positionCup[i].x + 2, positionCup[i].y, 0, 0.5 * Math.PI));            
         tray.add(createAndPositionMiniWall(positionCup[i].x - 2, positionCup[i].y, 0, 0.5 * Math.PI));
+        
+        tray.add(createAndPositionMiniWall(positionCup[i].x + (2/1.5), positionCup[i].y + (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI));
+        tray.add(createAndPositionMiniWall(positionCup[i].x - (2/1.5), positionCup[i].y + (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI));            
+        tray.add(createAndPositionMiniWall(positionCup[i].x + (2/1.5), positionCup[i].y - (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI));
+        tray.add(createAndPositionMiniWall(positionCup[i].x - (2/1.5), positionCup[i].y - (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI));
     }
 }
 
@@ -81,8 +86,15 @@ function createTrayWithCups(y, rotation){
 }
 
 function createAndPositionMiniWall(x, y, rotationX, rotationY){
+    var height = width = MINIWALL_SIZE;
+    if(rotationX == 0){
+        height *= 2.5;
+    }else{
+        width *= 2.5;
+    }
+    
     var miniWall = new Physijs.BoxMesh(
-        new THREE.PlaneGeometry(MINIWALL_SIZE, MINIWALL_SIZE),
+        new THREE.PlaneGeometry(height, width),
         new THREE.MeshBasicMaterial({
             map : THREE.ImageUtils.loadTexture("assets/img/transparent.png"),
             transparent : true
