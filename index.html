@@ -8,6 +8,8 @@
     <script src="libs/stats.min.js"></script>
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
+    <script src="assets/js/element.create.js"></script>
+    <script src="assets/js/stats.add.js"></script>
 
     <style>
         body {
@@ -22,104 +24,25 @@
 
     Physijs.scripts.worker = 'libs/physijs_worker.js';
     Physijs.scripts.ammo = 'ammo.js';
-    
-    var loader = new THREE.ColladaLoader();
+        
     var renderer;
     var scene;
     var camera;
     var cameraControl;
     var stats;
-    var plane;
 
     function init() {
         scene = new Physijs.Scene;
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        
-        var planeGeometry = new THREE.PlaneGeometry(30,30*2.4);
-        var planeMaterial = new THREE.MeshLambertMaterial({color: 'white'});
-        plane = new Physijs.PlaneMesh(planeGeometry,planeMaterial);
-        plane.receiveShadow = true;
-
-        plane.position.x = 0;
-        plane.position.y = 0;
-        plane.position.z = -12;
-        plane.rotation.x = -0.43 * Math.PI;
-
-        var spotLight = new THREE.SpotLight(0x404040);
-        spotLight.position.set(0, 70, 30);
-        scene.add(spotLight);
-
-        renderer = new THREE.WebGLRenderer();
-        renderer.setClearColor(0xc0c0c0, 1.0);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMapEnabled = true;
-
-        camera.position.x = 0;
-        camera.position.y = 30;
-        camera.position.z = 50;
+        camera.position.set(0, 30, 50);
         camera.lookAt(scene.position); 
-        cameraControl = new THREE.OrbitControls(camera); 
-
-        addTray(-30, 0);
-        addTray(30, Math.PI);       
-            
-        var sphere = new Physijs.BoxMesh(new THREE.SphereGeometry(0.6,32,32), new THREE.MeshLambertMaterial({color: 0xffffff }));
-        sphere.position.y = 20;
+        cameraControl = new THREE.OrbitControls(camera);
         
-        scene.add(sphere);
-        
-        scene.add(plane);
+        scene = createScene(scene);
 
         addStatsObject();
         document.body.appendChild(renderer.domElement);
         render();
-    }
-    
-    var positionCup = [{x:0,y:0},{x:-2,y:-3.5},{x:2,y:-3.5},{x:-6,y:-3.5},{x:6,y:-3.5},{x:-4,y:0},{x:4,y:0},{x:-2,y:3.5},{x:2,y:3.5},{x:0,y:7}];
-
-    function addCupOnPlane(tray){                
-        for (var i=0; i<positionCup.length; i++){
-            loader.options.convertUpAxis = true;
-            loader.load('assets/collada/plasticcup.dae', function(collada){                
-                var dae = collada.scene;
-                var skin = collada.skins[0];                
-                
-                dae.position.set(positionCup[i].x,positionCup[i].y,0);
-                dae.scale.set(1.5, 1.5, 1.5);
-                dae.rotation.x = 0.5 * Math.PI;
-                tray.add(dae);
-            });
-        }
-    }
-
-    function addTray(y,rotation){
-        var planeGeometry = new THREE.PlaneGeometry(1,1);
-        var planeMaterial = new THREE.MeshLambertMaterial({opacity:0.0, color: 'white'});
-        var tray = new Physijs.PlaneMesh(planeGeometry,planeMaterial);
-        tray.position.x = 0;
-        tray.position.y = y;
-        tray.position.z = 0;
-        tray.rotation.z = rotation;
-        addCupOnPlane(tray);
-        
-        for (var i = 0; i < positionCup.length; i++){
-            tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y + 1.7, 0.5 * Math.PI, 0));                     
-            tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y - 1.7, 0.5 * Math.PI, 0));            
-            tray.add(createAndPositionMiniWall(positionCup[i].x + 2, positionCup[i].y, 0, 0.5 * Math.PI));            
-            tray.add(createAndPositionMiniWall(positionCup[i].x - 2, positionCup[i].y, 0, 0.5 * Math.PI));
-        }
-        plane.add(tray);
-    }
-    
-    function createAndPositionMiniWall(x, y, rotationX, rotationY){
-        var miniGeometry = new THREE.PlaneGeometry(3.5,3.5);
-        var miniTexture = THREE.ImageUtils.loadTexture("assets/img/transparent.png");
-        var miniMaterial = new THREE.MeshBasicMaterial({map : miniTexture, transparent : true});
-        var miniWall = new Physijs.BoxMesh(miniGeometry, miniMaterial, rotationX, rotationY);
-        miniWall.position.set(x, y, 2);
-        miniWall.rotation.x = rotationX;
-        miniWall.rotation.y = rotationY;
-        return miniWall;
     }
 
     function render() {
@@ -135,17 +58,7 @@
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
-
-    function addStatsObject() {
-        stats = new Stats();
-        stats.setMode(0);
-        stats.domElement.style.position = 'absolute';
-        stats.domElement.style.left = '0px';
-        stats.domElement.style.top = '0px';
-
-        document.body.appendChild(stats.domElement);
-    }
-
+    
     window.onload = init;
     window.addEventListener('resize', handleResize, false);
 </script>
