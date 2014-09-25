@@ -4,11 +4,12 @@ var loader = new THREE.ColladaLoader();
 var positionCup = [{x:0,y:0},{x:-2,y:-3.5},{x:2,y:-3.5},{x:-6,y:-3.5},{x:6,y:-3.5},{x:-4,y:0},{x:4,y:0},{x:-2,y:3.5},{x:2,y:3.5},{x:0,y:7}];
 
 var MINIWALL_SIZE = 3.5;
+var TABLE_SIZE = 30;
 /* FIN Variables globales pour ce fichier */
 
 function createScene(scene){
     table = new Physijs.PlaneMesh(
-        new THREE.PlaneGeometry(30, 30*2.4),
+        new THREE.PlaneGeometry(TABLE_SIZE, TABLE_SIZE * 2.4),
         new THREE.MeshLambertMaterial({color: 'white'})
     );
     table.receiveShadow = true;
@@ -27,10 +28,12 @@ function createScene(scene){
     table.add(createTrayWithCups(-30, 0));
     table.add(createTrayWithCups(30, Math.PI));
         
-    var sphere = new Physijs.BoxMesh(new THREE.SphereGeometry(0.6, 32, 32), new THREE.MeshLambertMaterial({color: 0xffffff }));
+    var sphere = new Physijs.BoxMesh(
+        new THREE.SphereGeometry(0.6, 32, 32),
+        new THREE.MeshLambertMaterial({color: 0xffffff})
+    );
     sphere.position.set(0, 20, 0);
     scene.add(sphere);
-    
     scene.add(table);
     
     return scene;
