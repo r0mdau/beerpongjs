@@ -43,7 +43,7 @@
         plane.position.x = 0;
         plane.position.y = 0;
         plane.position.z = -12;
-        plane.rotation.x = -0.4 * Math.PI;
+        plane.rotation.x = -0.43 * Math.PI;
 
         var spotLight = new THREE.SpotLight(0x404040);
         spotLight.position.set(0, 70, 30);
@@ -75,7 +75,7 @@
         render();
     }
     
-    var positionCup = [{x:0,y:0},{x:-2,y:-3},{x:2,y:-3},{x:-6,y:-3},{x:6,y:-3},{x:-4,y:0},{x:4,y:0},{x:-2,y:3},{x:2,y:3},{x:0,y:6}];
+    var positionCup = [{x:0,y:0},{x:-2,y:-3.5},{x:2,y:-3.5},{x:-6,y:-3.5},{x:6,y:-3.5},{x:-4,y:0},{x:4,y:0},{x:-2,y:3.5},{x:2,y:3.5},{x:0,y:7}];
 
     function addCupOnPlane(tray){                
         for (var i=0; i<positionCup.length; i++){
@@ -103,20 +103,20 @@
         addCupOnPlane(tray);
         
         for (var i = 0; i < positionCup.length; i++){
-            tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y + 1.5, 0.5 * Math.PI, 0));                     
-            tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y - 1.5, 0.5 * Math.PI, 0));            
-            tray.add(createAndPositionMiniWall(positionCup[i].x + 1.5, positionCup[i].y, 0, 0.5 * Math.PI));            
-            tray.add(createAndPositionMiniWall(positionCup[i].x - 1.5, positionCup[i].y, 0, 0.5 * Math.PI));
+            tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y + 1.7, 0.5 * Math.PI, 0));                     
+            tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y - 1.7, 0.5 * Math.PI, 0));            
+            tray.add(createAndPositionMiniWall(positionCup[i].x + 2, positionCup[i].y, 0, 0.5 * Math.PI));            
+            tray.add(createAndPositionMiniWall(positionCup[i].x - 2, positionCup[i].y, 0, 0.5 * Math.PI));
         }
         plane.add(tray);
     }
     
     function createAndPositionMiniWall(x, y, rotationX, rotationY){
-        var miniGeometry = new THREE.PlaneGeometry(3,3);
+        var miniGeometry = new THREE.PlaneGeometry(3.5,3.5);
         var miniTexture = THREE.ImageUtils.loadTexture("assets/img/transparent.png");
-        var miniMaterial = new THREE.MeshBasicMaterial({map:miniTexture, transparent:true});
+        var miniMaterial = new THREE.MeshBasicMaterial({map : miniTexture, transparent : true});
         var miniWall = new Physijs.BoxMesh(miniGeometry, miniMaterial, rotationX, rotationY);
-        miniWall.position.set(x, y, 1.5);
+        miniWall.position.set(x, y, 2);
         miniWall.rotation.x = rotationX;
         miniWall.rotation.y = rotationY;
         return miniWall;
