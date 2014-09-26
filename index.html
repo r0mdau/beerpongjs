@@ -9,6 +9,7 @@
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
 	<script src="libs/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/cup.load.js"></script>
     <script src="assets/js/scene.create.js"></script>
     <script src="assets/js/cursor.create.js"></script>
     <script src="assets/js/stats.add.js"></script>
@@ -43,6 +44,8 @@
     var cameraControl;
     var stats;
     var isPaused = true;
+    
+    loadCup();
 	
 	$(document).ready(function() {
 		initCursor();

@@ -1,7 +1,6 @@
 /* Variables globales pour ce fichier */
 var table;
 var sphere;
-var loader = new THREE.ColladaLoader();
 var positionCup = [{x:0,y:0},{x:-2,y:-3.5},{x:2,y:-3.5},{x:-6,y:-3.5},{x:6,y:-3.5},{x:-4,y:0},{x:4,y:0},{x:-2,y:3.5},{x:2,y:3.5},{x:0,y:7}];
 
 var MINIWALL_SIZE = 1.4;
@@ -44,16 +43,11 @@ function initSphere(){
     scene.add(sphere);
 }
 
-function addCupsOnTray(tray){    
+function addCupsOnTray(tray){
     for (var i = 0; i < positionCup.length; i++){
-        loader.options.convertUpAxis = true;
-        loader.load('assets/collada/plasticcup.dae', function(collada){                
-            var cup = collada.scene;               
-            cup.position.set(positionCup[i].x, positionCup[i].y, 0);
-            cup.scale.set(1.5, 1.5, 1.5);
-            cup.rotation.x = 0.5 * Math.PI;
-            tray.add(cup);
-        });
+        var newcup = cup.clone();
+        newcup.position.set(positionCup[i].x, positionCup[i].y, 0);
+        tray.add(newcup);
     }
 }
 
