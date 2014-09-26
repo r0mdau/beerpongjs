@@ -11,7 +11,7 @@ function doThingsWhenMyKeyIsPressed(event){
     }else if (keyMap("i", event)) {
         isPaused = true;
 	initSphere();
-    }else if (event.charCode == 13) { // enter
+    }else if (event.keyCode == 13) { // enter
 	sphere.setLinearVelocity({x: $('#direction').val(), y: 2, z: -$('#puissance').val()});
         unPause();
     }else if (keyMap("k", event)) {
