@@ -1,6 +1,6 @@
 function MyScreen () {
-    this.nombre = 20;
-    this.augmenter = true;
+    this.puissanceVal = 20;
+    this.toIncrease = true;
 }
 
 MyScreen.prototype.addStatsObject = function() {
@@ -29,16 +29,16 @@ MyScreen.prototype.initGameMenu = function() {
 }
 
 MyScreen.prototype.randomPowerCursor = function (){
-    $('#puissance').val(this.nombre);
-    if (this.augmenter) {
-        this.nombre++;
+    $('#puissance').val(this.puissanceVal);
+    if (this.toIncrease) {
+        this.puissanceVal++;
     }else{
-        this.nombre--;
+        this.puissanceVal--;
     }
     
-    if (this.nombre > 49) {
-        this.augmenter = false;
-    }else if(this.nombre < 21){
-        this.augmenter = true;
+    if (this.puissanceVal > 49) {
+        this.toIncrease = false;
+    }else if(this.puissanceVal < 21){
+        this.toIncrease = true;
     }
 }
