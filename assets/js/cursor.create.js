@@ -6,16 +6,11 @@ var augmenter = true;
 function initCursor() {
     var div = $('#control');
     div.css({
-        "margin-left" : (window.innerWidth - div.width() - 10)+"px",
-        "margin-top" : (window.innerHeight - div.height() - 10)+"px",
+        "left" : (window.innerWidth - div.width() - 50)+"px",
+        "top" : (window.innerHeight - div.height() - 50)+"px",
         "border-radius" : "10px",
-        "background-color" : "#D8D8D8",
-        "font-family" : "Verdana"
-    });
-    
-    $('#launch').click(function(){
-        sphere.setLinearVelocity({x: $('#direction').val(), y: 2, z: -$('#puissance').val()});
-        unPause()
+        "border" : "1px solid black",
+        "font-family" : "Helvetica"
     });
 }
 
