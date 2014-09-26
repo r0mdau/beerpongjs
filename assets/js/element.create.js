@@ -11,13 +11,13 @@ var TABLE_SIZE = 30;
 function createScene(scene){
     table = new Physijs.PlaneMesh(
         new THREE.PlaneGeometry(TABLE_SIZE, TABLE_SIZE * 2.4),
-        new THREE.MeshLambertMaterial({color: 'white'})
+        new THREE.MeshLambertMaterial({map : THREE.ImageUtils.loadTexture("assets/img/beerpongofficial.jpg")})
     );
     table.receiveShadow = true;
     table.position.set(0, 0, -12);
     table.rotation.x = -0.5 * Math.PI;
 
-    var spotLight = new THREE.SpotLight(0x404040);
+    var spotLight = new THREE.SpotLight(0xffffff);
     spotLight.position.set(0, 70, 30);
     scene.add(spotLight);
 
@@ -31,9 +31,9 @@ function createScene(scene){
         
     sphere = new Physijs.BoxMesh(
         new THREE.SphereGeometry(0.6, 32, 32),
-        new THREE.MeshLambertMaterial({color: 0xffffff})
+        new THREE.MeshLambertMaterial({map : THREE.ImageUtils.loadTexture("assets/img/fire.png")})
     );
-    initSphere();    
+    initSphere();
     scene.add(table);
     
     return scene;
