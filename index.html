@@ -9,11 +9,11 @@
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
 	<script src="libs/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/cup.load.js"></script>
     <script src="assets/js/scene.create.js"></script>
-    <script src="assets/js/cursor.create.js"></script>
-    <script src="assets/js/stats.add.js"></script>
 	<script src="assets/js/doThingsWhenMyKeyIsPressed.js"></script>
+    <script src="assets/js/game.js"></script>
+    <script src="assets/js/myscreen.js"></script>
+    <script src="assets/js/ball.js"></script>
 
     <style>
         body {
@@ -43,47 +43,33 @@
     Physijs.scripts.worker = 'libs/physijs_worker.js';
     Physijs.scripts.ammo = 'ammo.js';
         
+    var game, myScreen;
     var renderer;
     var scene;
-    var camera;
-    var cameraControl;
-    var stats;
-    var isPaused = true;
-    
-    loadCup();
+    var camera, cameraControl;
+    var cup;
 	
 	$(document).ready(function() {
-		initCursor();
-		
         scene = new Physijs.Scene;
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 30, 50);
-        camera.lookAt(scene.position); 
-        cameraControl = new THREE.OrbitControls(camera);
+        game = new Game();
+        game.loadCup();
+        createScene();
         
-        scene = createScene(scene);
-        
-        addStatsObject();
+        myScreen = new MyScreen();
+        myScreen.initGameMenu();
+        myScreen.addStatsObject();
         document.body.appendChild(renderer.domElement);
         render();
     });
     
     function render() {        
-        if(!isPaused){
-            scene.simulate();
-        }
+        game.play();
         
-        randomPowerCursor();
-        stats.update();
+        myScreen.updateStats();
         cameraControl.update();
         requestAnimationFrame(render);
         renderer.render(scene, camera);
     }
-	
-	function unPause(){
-		isPaused = false;
-		scene.onSimulationResume();
-	}
     
     $(document).keypress(function(e) {
 		doThingsWhenMyKeyIsPressed(e);
