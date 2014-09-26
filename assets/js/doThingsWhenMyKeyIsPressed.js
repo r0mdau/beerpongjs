@@ -10,5 +10,5 @@ function doThingsWhenMyKeyIsPressed(event){
 }
 
 function keyMap(letter, event){
-    return letter.charCodeAt(0) == event.keyCode;
+    return letter.charCodeAt(0) == event.charCode;
 }
