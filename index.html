@@ -9,7 +9,8 @@
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
 	<script src="libs/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/element.create.js"></script>
+    <script src="assets/js/scene.create.js"></script>
+    <script src="assets/js/cursor.create.js"></script>
     <script src="assets/js/stats.add.js"></script>
 	<script src="assets/js/doThingsWhenMyKeyIsPressed.js"></script>
 
@@ -43,21 +44,8 @@
     var stats;
     var isPaused = true;
 	
-	var div = $('#control');
-    
-    $(document).ready(function() {
-		div.css({
-			"margin-left" : (window.innerWidth - div.width() - 10)+"px",
-			"margin-top" : (window.innerHeight - div.height() - 10)+"px",
-			"border-radius" : "10px",
-			"background-color" : "#D8D8D8",
-            "font-family" : "Verdana"
-		})
-		
-		$('#launch').click(function(){
-			sphere.setLinearVelocity({x: $('#direction').val(), y: 2, z: -$('#puissance').val()});
-			unPause()
-		});
+	$(document).ready(function() {
+		initCursor();
 		
         scene = new Physijs.Scene;
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -71,11 +59,13 @@
         document.body.appendChild(renderer.domElement);
         render();
     });
-
+    
     function render() {        
         if(!isPaused){
             scene.simulate();
         }
+        
+        randomPowerCursor();
         stats.update();
         //cameraControl.update();
         requestAnimationFrame(render);
