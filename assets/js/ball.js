@@ -14,8 +14,8 @@ Ball.prototype.init = function(){
 }
 
 Ball.prototype.isInCup = function(cup){
-    return this.position.x < cup.position.x + 1.5 && this.position.x > cup.position.x - 1.5
-        && this.position.y < cup.position.y + 1.5 && this.position.y > cup.position.y - 1.5;
+    return this.position.x < cup.coord.x + 2 && this.position.x > cup.coord.x - 2
+        && this.position.z < cup.coord.y + 2 && this.position.z > cup.coord.y - 2;
 }
 
 Ball.prototype.isStopped = function () {

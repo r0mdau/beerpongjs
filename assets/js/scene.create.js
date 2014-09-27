@@ -39,13 +39,13 @@ function createScene(){
         
     ball = new Ball();
     ball.init();
-    table.name = 'toto';
     scene.add(table);
     
     $.each(cups, function(index, value){
         cups[index].coord = {
-            x : value.position.x + value.parent.position.x + value.parent.parent.position.x,
-            y : value.position.y + value.parent.position.y + value.parent.parent.position.y
+            x : -(value.position.x + value.parent.position.x + value.parent.parent.position.x),
+            y : value.position.y + value.parent.position.y + value.parent.parent.position.z,
+            z : value.position.z + value.parent.position.z + value.parent.parent.position.y
         };
     });
     
