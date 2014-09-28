@@ -13,6 +13,11 @@ Ball.prototype.init = function(){
     scene.add(this);
 }
 
+Ball.prototype.launch = function(velocity){
+    this.setLinearVelocity(velocity);
+    game.checkIfBallWillBeInCup(velocity);
+}
+
 Ball.prototype.isInCup = function(cup){
     return this.position.x < cup.coord.x + 2 && this.position.x > cup.coord.x - 2
         && this.position.z < cup.coord.y + 2 && this.position.z > cup.coord.y - 2;
