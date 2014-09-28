@@ -1,12 +1,13 @@
 function Game () {
     this.isPaused = true;
-    this.cameraIsAnimated = false;
-    this.velocitysForCups = [
-                        {x : 0, z : -32.5},
-                  {x : 0, z : 0},{x : 0, z : 0},
-           {x : 0, z : 0},{x : 0, z : -37},{x : 0, z : 0},
-    {x: 3.5, y: 2, z: -39},{x : 0, z : 0},{x : 0, z : 0},{x: -3.5, y: 2, z: -39},
-    ];
+    this.replay = false;
+}
+
+Game.prototype.init = function(){
+    this.isPaused = true;
+    this.replay = false;
+    this.initCamera();
+	ball.init();
 }
 
 Game.prototype.play = function(){
@@ -15,19 +16,21 @@ Game.prototype.play = function(){
             ball.isLaunched = true;
         }
         scene.simulate();
-        this.runIfBallIsStopped();
+        if(!this.replay){
+            this.checkIfBallIsInCup();
+        }
     }
-    if(this.cameraIsAnimated){
-        this.playCameraAnimation1();
+    if(this.replay){               
+        if (!ball.isLaunched){
+            ball.launch(ball.lastVelocity);
+            this.unPause();            
+        }else if (ball.isLaunched && !ball.isStopped()) {
+            this.playCameraAnimation1();
+        }else{
+            this.init();
+        }
     }
     myScreen.randomPowerCursor();
-}
-
-Game.prototype.init = function(){
-    this.isPaused = true;
-    this.cameraIsAnimated = false;
-    this.initCamera();
-	ball.init();
 }
 
 Game.prototype.initCamera = function(){
@@ -35,10 +38,10 @@ Game.prototype.initCamera = function(){
     camera.lookAt(scene.position);
 }
 
-Game.prototype.runIfBallIsStopped = function() {
+Game.prototype.checkIfBallIsInCup = function() {
     if (ball.isLaunched && ball.isStopped()) {
         this.removeCupIfBallIsIn();
-        ball.isLaunched = false;
+        ball.init();
     }
 }
 
@@ -55,23 +58,7 @@ Game.prototype.removeCupIfBallIsIn = function() {
     });
 }
 
-Game.prototype.velocityIsKnownAndCupIsNotRemoved = function (velocity){
-    var found = false;
-    for(var i = 0; i < this.velocitysForCups.length; i++){
-        if(this.velocitysForCups[i].x == velocity.x && this.velocitysForCups[i].z == velocity.z && !cups[i].removed){
-            found = true;
-        }
-    }
-    return found;
-}
-
-Game.prototype.checkIfBallWillBeInCup = function(velocity){
-    if(this.velocityIsKnownAndCupIsNotRemoved(velocity)){
-        this.cameraIsAnimated = true;
-    }
-}
-
-Game.prototype.playCameraAnimation1 = function(){
+Game.prototype.playCameraAnimation1 = function(){  
     camera.position.set(camera.position.x + (ball.position.y/20), camera.position.y, camera.position.z);
     camera.lookAt(tray2.position);
 }

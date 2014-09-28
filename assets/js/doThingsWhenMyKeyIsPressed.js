@@ -10,6 +10,8 @@ function doThingsWhenMyKeyIsPressed(event){
         game.unPause()
     }else if (keyMap("i", event)) {
         game.init();
+    }else if (keyMap("r", event)) {
+		game.replay = true;	
     }else if (event.keyCode == 13) { // enter
 		ball.launch({x: $('#direction').val(), y: 2, z: -$('#puissance').val()});
         game.unPause();		

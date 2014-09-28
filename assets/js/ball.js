@@ -10,12 +10,13 @@ function Ball () {
 
 Ball.prototype.init = function(){
     this.position.set(0, 15, 20);
+    this.isLaunched = false;
     scene.add(this);
 }
 
 Ball.prototype.launch = function(velocity){
+    this.lastVelocity = velocity;
     this.setLinearVelocity(velocity);
-    game.checkIfBallWillBeInCup(velocity);
 }
 
 Ball.prototype.isInCup = function(cup){
