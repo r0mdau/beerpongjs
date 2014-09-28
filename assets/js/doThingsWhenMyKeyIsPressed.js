@@ -9,8 +9,7 @@ function doThingsWhenMyKeyIsPressed(event){
     }else if (keyMap("o", event)) {
         game.unPause()
     }else if (keyMap("i", event)) {
-        game.isPaused = true;
-	ball.init();
+        game.init();
     }else if (event.keyCode == 13) { // enter
 	ball.setLinearVelocity({x: $('#direction').val(), y: 2, z: -$('#puissance').val()});
         game.unPause();	
@@ -23,13 +22,13 @@ function doThingsWhenMyKeyIsPressed(event){
 			dir.val(dirVal + 1);
 		}
     }else if (keyMap("a", event)) { // CHEAT POUR TESTS
-	ball.setLinearVelocity({x: 0, y: 2, z: -32.5});
+		ball.setLinearVelocity({x: 0, y: 2, z: -32.5});
         game.unPause();	
     }else if (keyMap("z", event)) { // CHEAT POUR TESTS
-	ball.setLinearVelocity({x: -3.5, y: 2, z: -39});
+		ball.setLinearVelocity({x: -3.5, y: 2, z: -39});
         game.unPause();	
     }else if (keyMap("e", event)) { // CHEAT POUR TESTS
-	ball.setLinearVelocity({x: 3.5, y: 2, z: -39});
+		ball.setLinearVelocity({x: 3.5, y: 2, z: -39});
         game.unPause();	
     }
 }

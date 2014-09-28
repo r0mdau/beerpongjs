@@ -7,6 +7,7 @@ var positionCup = [
                   {x:-4,y:0},{x:0,y:0},{x:4,y:0},
     {x:-6,y:-3.5}, {x:-2,y:-3.5}, {x:2,y:-3.5}, {x:6,y:-3.5}
     ];
+var miniWallNumber = 1;
 var MINIWALL_SIZE = 1.4;
 var TABLE_SIZE = 30;
 var cups = [];
@@ -51,6 +52,7 @@ function createScene(){
             y : value.position.y + value.parent.position.y + value.parent.parent.position.z,
             z : value.position.z + value.parent.position.z + value.parent.parent.position.y
         };
+        cups[index].removed = false;
     });
     
     return scene;
@@ -68,15 +70,15 @@ function addCupsOnTray(tray){
 
 function addMiniWallsOnTray(tray){
     for (var i = 0; i < positionCup.length; i++){
-        tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y + 1.7, 0.5 * Math.PI, 0));                     
-        tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y - 1.7, 0.5 * Math.PI, 0));            
-        tray.add(createAndPositionMiniWall(positionCup[i].x + 2, positionCup[i].y, 0, 0.5 * Math.PI));            
-        tray.add(createAndPositionMiniWall(positionCup[i].x - 2, positionCup[i].y, 0, 0.5 * Math.PI));
+        tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y + 1.7, 0.5 * Math.PI, 0, i));                     
+        tray.add(createAndPositionMiniWall(positionCup[i].x, positionCup[i].y - 1.7, 0.5 * Math.PI, 0, i));            
+        tray.add(createAndPositionMiniWall(positionCup[i].x + 2, positionCup[i].y, 0, 0.5 * Math.PI, i));            
+        tray.add(createAndPositionMiniWall(positionCup[i].x - 2, positionCup[i].y, 0, 0.5 * Math.PI, i));
         
-        tray.add(createAndPositionMiniWall(positionCup[i].x + (2/1.5), positionCup[i].y + (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI));
-        tray.add(createAndPositionMiniWall(positionCup[i].x - (2/1.5), positionCup[i].y + (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI));            
-        tray.add(createAndPositionMiniWall(positionCup[i].x + (2/1.5), positionCup[i].y - (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI));
-        tray.add(createAndPositionMiniWall(positionCup[i].x - (2/1.5), positionCup[i].y - (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI));
+        tray.add(createAndPositionMiniWall(positionCup[i].x + (2/1.5), positionCup[i].y + (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI, i));
+        tray.add(createAndPositionMiniWall(positionCup[i].x - (2/1.5), positionCup[i].y + (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI, i));            
+        tray.add(createAndPositionMiniWall(positionCup[i].x + (2/1.5), positionCup[i].y - (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI, i));
+        tray.add(createAndPositionMiniWall(positionCup[i].x - (2/1.5), positionCup[i].y - (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI, i));
     }
 }
 
@@ -94,7 +96,7 @@ function createTrayWithCups(y, rotation){
     return tray;
 }
 
-function createAndPositionMiniWall(x, y, rotationX, rotationY){
+function createAndPositionMiniWall(x, y, rotationX, rotationY, indice){
     var height = width = MINIWALL_SIZE;
     if(rotationX == 0){
         height *= 2.5;
@@ -109,7 +111,12 @@ function createAndPositionMiniWall(x, y, rotationX, rotationY){
             transparent : true
         })
     );
+    miniWall.name = 'miniWall' + indice + miniWallNumber;
     miniWall.position.set(x, y, 2);
     miniWall.rotation.set(rotationX, rotationY, 0);
+    
+    if(miniWallNumber == 8) miniWallNumber = 0;
+    miniWallNumber ++;
+    
     return miniWall;
 }
