@@ -1,8 +1,12 @@
 /* Variables globales pour ce fichier */
 var table;
 var ball;
-var positionCup = [{x:0,y:0},{x:-2,y:-3.5},{x:2,y:-3.5},{x:-6,y:-3.5},{x:6,y:-3.5},{x:-4,y:0},{x:4,y:0},{x:-2,y:3.5},{x:2,y:3.5},{x:0,y:7}];
-
+var positionCup = [
+                            {x:0,y:7},
+                    {x:-2,y:3.5},{x:2,y:3.5},
+                  {x:-4,y:0},{x:0,y:0},{x:4,y:0},
+    {x:-6,y:-3.5}, {x:-2,y:-3.5}, {x:2,y:-3.5}, {x:6,y:-3.5}
+    ];
 var MINIWALL_SIZE = 1.4;
 var TABLE_SIZE = 30;
 var cups = [];
