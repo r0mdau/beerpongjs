@@ -1,12 +1,11 @@
 function Game () {
     this.isPaused = true;
-    this.replay = false;
+    this.isReplaying = false;
 }
 
 Game.prototype.init = function(){
     this.isPaused = true;
-    this.replay = false;
-    this.initCamera();
+    this.isReplaying = false;
 	ball.init();
 }
 
@@ -16,21 +15,26 @@ Game.prototype.play = function(){
             ball.isLaunched = true;
         }
         scene.simulate();
-        if(!this.replay){
+        
+        if(!this.isReplaying){
             this.checkIfBallIsInCup();
-        }
-    }
-    if(this.replay){               
-        if (!ball.isLaunched){
-            ball.launch(ball.lastVelocity);
-            this.unPause();            
-        }else if (ball.isLaunched && !ball.isStopped()) {
-            this.playCameraAnimation1();
-        }else{
-            this.init();
+        }else{               
+            if(!ball.isLaunched){
+                ball.launch(ball.lastVelocity);           
+            }else if(ball.isLaunched && !ball.isStopped()) {
+                this.playCameraAnimation1();
+            }else{
+                this.init();
+                this.initCamera();
+            }
         }
     }
     myScreen.randomPowerCursor();
+}
+
+Game.prototype.replay = function(){
+    this.isReplaying = true;
+    this.unPause();    
 }
 
 Game.prototype.initCamera = function(){
@@ -42,6 +46,7 @@ Game.prototype.checkIfBallIsInCup = function() {
     if (ball.isLaunched && ball.isStopped()) {
         this.removeCupIfBallIsIn();
         ball.init();
+        this.isPaused = true;
     }
 }
 
