@@ -1,5 +1,7 @@
+'use strict';
+
 function MyScreen () {
-    this.puissanceVal = 20;
+    this.powerCursorVal = 20;
     this.toIncrease = true;
 }
 
@@ -29,16 +31,16 @@ MyScreen.prototype.initGameMenu = function() {
 }
 
 MyScreen.prototype.randomPowerCursor = function (){
-    $('#puissance').val(this.puissanceVal);
+    $('#puissance').val(this.powerCursorVal);
     if (this.toIncrease) {
-        this.puissanceVal++;
+        this.powerCursorVal++;
     }else{
-        this.puissanceVal--;
+        this.powerCursorVal--;
     }
     
-    if (this.puissanceVal > 49) {
+    if (this.powerCursorVal > 49) {
         this.toIncrease = false;
-    }else if(this.puissanceVal < 21){
+    }else if(this.powerCursorVal < 21){
         this.toIncrease = true;
     }
 }

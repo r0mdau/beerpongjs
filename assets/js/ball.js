@@ -1,3 +1,5 @@
+'use strict';
+
 Ball.prototype = new Physijs.BoxMesh(
     new THREE.SphereGeometry(0.6, 32, 32),
     new THREE.MeshLambertMaterial({map : THREE.ImageUtils.loadTexture("assets/img/fire.png")})

@@ -1,3 +1,5 @@
+'use strict';
+
 function doThingsWhenMyKeyIsPressed(event){
     var dir = $('#direction');
     var dirVal = parseInt($('#direction').val());

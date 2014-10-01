@@ -8,9 +8,9 @@
     <script src="libs/stats.min.js"></script>
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
-	<script src="libs/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/scene.create.js"></script>
+	<script src="libs/jquery-1.11.1.min.js"></script>    
 	<script src="assets/js/doThingsWhenMyKeyIsPressed.js"></script>
+	<script src="assets/js/scene.js"></script>
     <script src="assets/js/game.js"></script>
     <script src="assets/js/myscreen.js"></script>
     <script src="assets/js/ball.js"></script>
@@ -40,20 +40,17 @@
 <script>
     'use strict';
 
-    Physijs.scripts.worker = 'libs/physijs_worker.js';
-    Physijs.scripts.ammo = 'ammo.js';
-        
-    var game, myScreen;
+	var game, myScreen;
     var renderer;
     var scene;
     var camera, cameraControl;
-    var cup;
+    var cup, ball;
+	var myTray, opponentTray;
 	
 	$(document).ready(function() {
-        scene = new Physijs.Scene;
-        game = new Game();
-        game.loadCup();
-        createScene();
+        scene = new Scene();
+		scene.create();
+		game = new Game();
         
         myScreen = new MyScreen();
         myScreen.initGameMenu();

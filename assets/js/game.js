@@ -1,3 +1,5 @@
+'use strict';
+
 function Game () {
     this.isPaused = true;
     this.isReplaying = false;
@@ -51,12 +53,12 @@ Game.prototype.checkIfBallIsInCup = function() {
 }
 
 Game.prototype.removeCupIfBallIsIn = function() {
-    $.each(cups, function(index, cup){
+    $.each(scene.cups, function(index, cup){
         if (ball.isInCup(cup) && !cup.removed) {
             cup.removed = true;
-            tray2.remove(tray2.getObjectByName('cup'+index));
+            opponentTray.remove(opponentTray.getObjectByName('cup'+index));
             for(var i = 1; i < 9; i++){
-                tray2.remove(tray2.getObjectByName('miniWall'+index+i));
+                opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
             }
             game.init();
         }
@@ -65,20 +67,10 @@ Game.prototype.removeCupIfBallIsIn = function() {
 
 Game.prototype.playCameraAnimation1 = function(){  
     camera.position.set(camera.position.x + (ball.position.y/20), camera.position.y, camera.position.z);
-    camera.lookAt(tray2.position);
+    camera.lookAt(opponentTray.position);
 }
 
 Game.prototype.unPause = function(){
     this.isPaused = false;
     scene.onSimulationResume();        
-}
-
-Game.prototype.loadCup = function(){
-    var loader = new THREE.ColladaLoader();
-    loader.options.convertUpAxis = true;
-    loader.load('assets/collada/plasticcup.dae', function(collada){                
-        cup = collada.scene;
-        cup.scale.set(1.5, 1.5, 1.5);
-        cup.rotation.x = 0.5 * Math.PI;
-    });
 }
