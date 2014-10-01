@@ -3,6 +3,7 @@
 function Game () {
     this.isPaused = true;
     this.isReplaying = false;
+    this.canReplay = false;
 }
 
 Game.prototype.init = function(){
@@ -26,6 +27,7 @@ Game.prototype.play = function(){
             }else if(ball.isLaunched && !ball.isStopped()) {
                 this.playCameraAnimation1();
             }else{
+                opponentTray.remove(this.lastRemovedCup);
                 this.init();
                 this.initCamera();
             }
@@ -35,8 +37,12 @@ Game.prototype.play = function(){
 }
 
 Game.prototype.replay = function(){
-    this.isReplaying = true;
-    this.unPause();    
+    if(this.canReplay){
+        this.canReplay = false;        
+        opponentTray.add(this.lastRemovedCup);
+        this.isReplaying = true;
+        this.unPause();        
+    }
 }
 
 Game.prototype.initCamera = function(){
@@ -56,10 +62,15 @@ Game.prototype.removeCupIfBallIsIn = function() {
     $.each(scene.cups, function(index, cup){
         if (ball.isInCup(cup) && !cup.removed) {
             cup.removed = true;
-            opponentTray.remove(opponentTray.getObjectByName('cup'+index));
+            var cupToRemove = opponentTray.getObjectByName('cup'+index);
+            game.lastRemovedCup = cupToRemove;
+            opponentTray.remove(cupToRemove);
             for(var i = 1; i < 9; i++){
                 opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
             }
+            
+            game.canReplay = true;
+            myScreen.replayMessage.show();
             game.init();
         }
     });

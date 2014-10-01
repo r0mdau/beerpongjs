@@ -3,6 +3,8 @@
 function MyScreen () {
     this.powerCursorVal = 20;
     this.toIncrease = true;
+    this.div = $('#control');
+    this.replayMessage = $('#replay');
 }
 
 MyScreen.prototype.addStatsObject = function() {
@@ -19,11 +21,10 @@ MyScreen.prototype.updateStats = function() {
     this.stats.update();
 }
 
-MyScreen.prototype.initGameMenu = function() {
-    var div = $('#control');
-    div.css({
-        "left" : (window.innerWidth - div.width() - 50)+"px",
-        "top" : (window.innerHeight - div.height() - 50)+"px",
+MyScreen.prototype.initGameMenu = function() {    
+    this.div.css({
+        "left" : (window.innerWidth - this.div.width() - 50)+"px",
+        "top" : (window.innerHeight - this.div.height() - 50)+"px",
         "border-radius" : "10px",
         "border" : "1px solid black",
         "font-family" : "Helvetica"
