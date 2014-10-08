@@ -14,7 +14,7 @@ MyScreen.prototype.addStatsObject = function() {
     this.stats.domElement.style.left = '0px';
     this.stats.domElement.style.top = '0px';
 
-    document.body.appendChild(this.stats.domElement);
+    $('body').append(this.stats.domElement);
 }
 
 MyScreen.prototype.updateStats = function() {
@@ -47,5 +47,5 @@ MyScreen.prototype.randomPowerCursor = function (){
 }
 
 MyScreen.prototype.updateTheCounterOfDeletedCup = function (){
-    document.getElementById("nbcups").innerHTML = document.getElementById("nbcups").innerText - 1;
+    $("#nbcups").text($("#nbcups").text() - 1);
 }
