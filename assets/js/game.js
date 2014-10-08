@@ -68,7 +68,7 @@ Game.prototype.removeCupIfBallIsIn = function() {
             for(var i = 1; i < 9; i++){
                 opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
             }
-            
+            myScreen.updateTheCounterOfDeletedCup();
             game.canReplay = true;
             myScreen.replayMessage.show();
             game.init();

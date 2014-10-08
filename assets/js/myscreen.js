@@ -45,3 +45,7 @@ MyScreen.prototype.randomPowerCursor = function (){
         this.toIncrease = true;
     }
 }
+
+MyScreen.prototype.updateTheCounterOfDeletedCup = function (){
+    document.getElementById("nbcups").innerHTML = document.getElementById("nbcups").innerText - 1;
+}
