@@ -63,7 +63,7 @@ Scene.prototype.create = function(){
         };
         this.cups[index].removed = false;
     }
-}
+};
 
 Scene.prototype.addCupsOnTray = function(tray){
     for (var i = 0; i < this.matriceOfCups.length; i++){
@@ -73,7 +73,7 @@ Scene.prototype.addCupsOnTray = function(tray){
         this.cups.push(newcup);
         tray.add(newcup);
     }
-}
+};
 
 Scene.prototype.addMiniWallsOnTray = function(tray){
     for (var i = 0; i < this.matriceOfCups.length; i++){
@@ -87,7 +87,7 @@ Scene.prototype.addMiniWallsOnTray = function(tray){
         tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x + (2/1.5), this.matriceOfCups[i].y - (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI, i));
         tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x - (2/1.5), this.matriceOfCups[i].y - (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI, i));
     }
-}
+};
 
 Scene.prototype.createTrayWithCups = function(y, rotation){
     var tray = new Physijs.PlaneMesh(
@@ -101,7 +101,7 @@ Scene.prototype.createTrayWithCups = function(y, rotation){
     this.addMiniWallsOnTray(tray);
     
     return tray;
-}
+};
 
 Scene.prototype.createAndPositionMiniWall = function(x, y, rotationX, rotationY, indice){
     var height = MINIWALL_SIZE;
@@ -127,7 +127,7 @@ Scene.prototype.createAndPositionMiniWall = function(x, y, rotationX, rotationY,
     this.miniWallIndex ++;
     
     return miniWall;
-}
+};
 
 Scene.prototype.loadCup = function(){
     var loader = new THREE.ColladaLoader();
@@ -137,4 +137,4 @@ Scene.prototype.loadCup = function(){
         cup.scale.set(1.5, 1.5, 1.5);
         cup.rotation.x = 0.5 * Math.PI;
     });
-}
+};

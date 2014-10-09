@@ -10,7 +10,7 @@ Game.prototype.init = function(){
     this.isPaused = true;
     this.isReplaying = false;
 	ball.init();
-}
+};
 
 Game.prototype.play = function(){
     if(!game.isPaused){
@@ -34,39 +34,40 @@ Game.prototype.play = function(){
         }
     }
     myScreen.randomPowerCursor();
-}
+};
 
-Game.prototype.replay = function(){
-    if(this.canReplay){
-        this.canReplay = false;        
+Game.prototype.replay = function () {
+    if (this.canReplay) {
+        this.canReplay = false;
         opponentTray.add(this.lastRemovedCup);
         this.isReplaying = true;
-        this.unPause();        
+        this.unPause();
     }
-}
+};
 
-Game.prototype.initCamera = function(){
+Game.prototype.initCamera = function () {
     camera.position.set(0, 30, 50);
     camera.lookAt(scene.position);
-}
+};
 
-Game.prototype.checkIfBallIsInCup = function() {
+Game.prototype.checkIfBallIsInCup = function () {
     if (ball.isLaunched && ball.isStopped()) {
         this.removeCupIfBallIsIn();
         ball.init();
         this.isPaused = true;
     }
-}
+};
 
-Game.prototype.removeCupIfBallIsIn = function() {
-    $.each(scene.cups, function(index, cup){
+Game.prototype.removeCupIfBallIsIn = function () {
+    $.each(scene.cups, function (index, cup) {
         if (ball.isInCup(cup) && !cup.removed) {
             cup.removed = true;
-            var cupToRemove = opponentTray.getObjectByName('cup'+index);
+            var cupToRemove = opponentTray.getObjectByName('cup' + index);
             game.lastRemovedCup = cupToRemove;
             opponentTray.remove(cupToRemove);
-            for(var i = 1; i < 9; i++){
-                opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
+            for (var i = 1; i < 9; i++) {
+                //opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
+                scene.remove(scene._objects[2].children[0].children[0]);
             }
             myScreen.updateTheCounterOfDeletedCup();
             game.canReplay = true;
@@ -74,14 +75,14 @@ Game.prototype.removeCupIfBallIsIn = function() {
             game.init();
         }
     });
-}
+};
 
-Game.prototype.playCameraAnimation1 = function(){  
-    camera.position.set(camera.position.x + (ball.position.y/20), camera.position.y, camera.position.z);
+Game.prototype.playCameraAnimation1 = function () {
+    camera.position.set(camera.position.x + (ball.position.y / 20), camera.position.y, camera.position.z);
     camera.lookAt(opponentTray.position);
-}
+};
 
 Game.prototype.unPause = function(){
     this.isPaused = false;
     scene.onSimulationResume();        
-}
+};

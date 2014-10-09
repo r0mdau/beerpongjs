@@ -14,18 +14,18 @@ Ball.prototype.init = function(){
     this.position.set(0, 15, 20);
     this.isLaunched = false;
     scene.add(this);
-}
+};
 
 Ball.prototype.launch = function(velocity){
     this.lastVelocity = velocity;
     this.setLinearVelocity(velocity);
-}
+};
 
 Ball.prototype.isInCup = function(cup){
     return this.position.x < cup.coord.x + 2 && this.position.x > cup.coord.x - 2
         && this.position.z < cup.coord.y + 2 && this.position.z > cup.coord.y - 2;
-}
+};
 
 Ball.prototype.isStopped = function () {
     return this.getLinearVelocity().x === 0 && this.getLinearVelocity().y === 0 && this.getLinearVelocity().z === 0;
-}
+};

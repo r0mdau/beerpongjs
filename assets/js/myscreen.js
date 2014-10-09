@@ -15,11 +15,11 @@ MyScreen.prototype.addStatsObject = function() {
     this.stats.domElement.style.top = '0px';
 
     $('body').append(this.stats.domElement);
-}
+};
 
 MyScreen.prototype.updateStats = function() {
     this.stats.update();
-}
+};
 
 MyScreen.prototype.initGameMenu = function() {    
     this.div.css({
@@ -29,7 +29,7 @@ MyScreen.prototype.initGameMenu = function() {
         "border" : "1px solid black",
         "font-family" : "Helvetica"
     });
-}
+};
 
 MyScreen.prototype.randomPowerCursor = function (){
     $('#puissance').val(this.powerCursorVal);
@@ -44,8 +44,8 @@ MyScreen.prototype.randomPowerCursor = function (){
     }else if(this.powerCursorVal < 21){
         this.toIncrease = true;
     }
-}
+};
 
 MyScreen.prototype.updateTheCounterOfDeletedCup = function (){
     $("#nbcups").text($("#nbcups").text() - 1);
-}
+};

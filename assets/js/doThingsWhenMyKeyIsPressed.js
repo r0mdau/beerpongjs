@@ -2,7 +2,7 @@
 
 function doThingsWhenMyKeyIsPressed(event){
     var dir = $('#direction');
-    var dirVal = parseInt($('#direction').val());
+    var dirVal = parseInt(dir.val());
     var dirMin = parseInt(dir.attr('min'));
     var dirMax = parseInt(dir.attr('max'));
     
