@@ -61,25 +61,25 @@ Game.prototype.checkIfBallIsInCup = function () {
 };
 
 Game.prototype.removeCupIfBallIsIn = function () {
-    $.each(scene.cups, function (index, cup) {
+    for(var index = 0; index < scene.cups.length; index++){
+        var cup = scene.cups[index];
         if (ball.isInCup(cup) && !cup.removed) {
             cup.removed = true;
             var cupToRemove = opponentTray.getObjectByName('cup' + index);
             var beerToRemove = opponentTray.getObjectByName('beer'+index);
-            game.lastRemovedCup = cupToRemove;
-            game.beerRemoved = beerToRemove;
+            this.lastRemovedCup = cupToRemove;
+            this.beerRemoved = beerToRemove;
             opponentTray.remove(cupToRemove);
             opponentTray.remove(beerToRemove);
             for (var i = 1; i < 9; i++) {
-                //opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
-                scene.remove(scene._objects[2].children[0].children[0]);
+                opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
             }
             myScreen.updateTheCounterOfDeletedCup();
-            game.canReplay = true;
+            this.canReplay = true;
             myScreen.replayMessage.show();
-            game.init();
+            this.init();
         }
-    });
+    }
 };
 
 Game.prototype.playCameraAnimation1 = function () {

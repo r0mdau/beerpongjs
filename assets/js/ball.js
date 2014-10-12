@@ -23,7 +23,8 @@ Ball.prototype.launch = function(velocity){
 
 Ball.prototype.isInCup = function(cup){
     return this.position.x < cup.coord.x + 2 && this.position.x > cup.coord.x - 2
-        && this.position.z < cup.coord.y + 2 && this.position.z > cup.coord.y - 2;
+        && this.position.z < cup.coord.y + 2 && this.position.z > cup.coord.y - 2
+        && this.position.y < 3.1;
 };
 
 Ball.prototype.isStopped = function () {
