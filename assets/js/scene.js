@@ -103,8 +103,7 @@ Scene.prototype.createTrayWithCups = function(y, rotation){
     
     this.addCupsOnTray(tray);
     this.addMiniWallsOnTray(tray);
-    this.createBeerInTheCup(tray);
-    
+
     return tray;
 };
 
@@ -145,7 +144,7 @@ Scene.prototype.createBeerInTheCup = function(x, y, rotationX, rotationY, indice
     beer.position.set(x,y,2);
     beer.rotation.set(Math.PI/2,0,0);    
     return beer;
-}
+};
 
 Scene.prototype.loadCup = function(){
     var loader = new THREE.ColladaLoader();

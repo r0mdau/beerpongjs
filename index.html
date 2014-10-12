@@ -74,9 +74,8 @@
     $(document).keypress(function(e) {
         if (!ball.isLaunched) {
             playWhenMyKeyIsPressed(e);
-        } else {
-            doThingsWhenMyKeyIsPressed(e);
         }
+        doThingsWhenMyKeyIsPressed(e);
     });
 	
 	$(window).resize(function() {
