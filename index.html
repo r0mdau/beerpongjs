@@ -9,7 +9,7 @@
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
 	<script src="libs/jquery-1.11.1.min.js"></script>    
-	<script src="assets/js/doThingsWhenMyKeyIsPressed.js"></script>
+	<script src="assets/js/whenMyKeyIsPressed.js"></script>
 	<script src="assets/js/scene.js"></script>
     <script src="assets/js/game.js"></script>
     <script src="assets/js/myscreen.js"></script>
@@ -37,6 +37,7 @@
 		<p>Puissance :</p>
 		<input type="range" id="puissance" value="35" min="20" max="50"/>
         <p>Cups restantes : <span id="nbcups">10</span></p>
+        <p>Nombre de tirs : <span id="nbtir">0</span></p>
 		<br/>
 	</div>
 <script>
@@ -71,7 +72,11 @@
     }
     
     $(document).keypress(function(e) {
-		doThingsWhenMyKeyIsPressed(e);
+        if (!ball.isLaunched) {
+            playWhenMyKeyIsPressed(e);
+        } else {
+            doThingsWhenMyKeyIsPressed(e);
+        }
     });
 	
 	$(window).resize(function() {
