@@ -28,6 +28,7 @@ Game.prototype.play = function(){
                 this.playCameraAnimation1();
             }else{
                 opponentTray.remove(this.lastRemovedCup);
+                opponentTray.remove(this.beerRemoved);
                 this.init();
                 this.initCamera();
             }
@@ -40,6 +41,7 @@ Game.prototype.replay = function () {
     if (this.canReplay) {
         this.canReplay = false;
         opponentTray.add(this.lastRemovedCup);
+        opponentTray.add(this.beerRemoved);
         this.isReplaying = true;
         this.unPause();
     }
@@ -63,8 +65,11 @@ Game.prototype.removeCupIfBallIsIn = function () {
         if (ball.isInCup(cup) && !cup.removed) {
             cup.removed = true;
             var cupToRemove = opponentTray.getObjectByName('cup' + index);
+            var beerToRemove = opponentTray.getObjectByName('beer'+index);
             game.lastRemovedCup = cupToRemove;
+            game.beerRemoved = beerToRemove;
             opponentTray.remove(cupToRemove);
+            opponentTray.remove(beerToRemove);
             for (var i = 1; i < 9; i++) {
                 //opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
                 scene.remove(scene._objects[2].children[0].children[0]);
