@@ -12,6 +12,7 @@ Scene.prototype.constructor = Scene;
 function Scene () {
     this.cups = [];
     this.miniWallIndex = 1;
+    this.beerIndex = 1;
     this.matriceOfCups = [
                             {x:0,y:7},
                     {x:-2,y:3.5},{x:2,y:3.5},
@@ -86,6 +87,9 @@ Scene.prototype.addMiniWallsOnTray = function(tray){
         tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x - (2/1.5), this.matriceOfCups[i].y + (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI, i));            
         tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x + (2/1.5), this.matriceOfCups[i].y - (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI, i));
         tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x - (2/1.5), this.matriceOfCups[i].y - (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI, i));
+    
+        tray.add(this.createBeerInTheCup(this.matriceOfCups[i].x, this.matriceOfCups[i].y, 0.5 * Math.PI, 0, i));                     
+
     }
 };
 
@@ -99,6 +103,7 @@ Scene.prototype.createTrayWithCups = function(y, rotation){
     
     this.addCupsOnTray(tray);
     this.addMiniWallsOnTray(tray);
+    this.createBeerInTheCup(tray);
     
     return tray;
 };
@@ -128,6 +133,19 @@ Scene.prototype.createAndPositionMiniWall = function(x, y, rotationX, rotationY,
     
     return miniWall;
 };
+
+Scene.prototype.createBeerInTheCup = function(x, y, rotationX, rotationY, indice){
+    var beer = new Physijs.CylinderMesh(
+        new THREE.CylinderGeometry(1.5, 1.5, 1, 10),
+        new THREE.MeshBasicMaterial({
+            map : THREE.ImageUtils.loadTexture("assets/img/beer.jpeg")
+        })
+    );
+    beer.name = 'beer' + indice;
+    beer.position.set(x,y,2);
+    beer.rotation.set(Math.PI/2,0,0);    
+    return beer;
+}
 
 Scene.prototype.loadCup = function(){
     var loader = new THREE.ColladaLoader();
