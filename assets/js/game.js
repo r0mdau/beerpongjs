@@ -4,6 +4,7 @@ function Game () {
     this.isPaused = true;
     this.isReplaying = false;
     this.canReplay = false;
+    this.miniWallsRemoved = [];
 }
 
 Game.prototype.init = function(){
@@ -27,8 +28,11 @@ Game.prototype.play = function(){
             }else if(ball.isLaunched && !ball.isStopped()) {
                 this.playCameraAnimation1();
             }else{
-                opponentTray.remove(this.lastRemovedCup);
-                opponentTray.remove(this.beerRemoved);
+                scene.remove(this.lastRemovedCup);
+                scene.remove(this.beerRemoved);
+                for(var i = 0; i <  this.miniWallsRemoved.length; i++){
+                    scene.remove(this.miniWallsRemoved[i]);
+                }
                 this.init();
                 this.initCamera();
             }
@@ -40,8 +44,11 @@ Game.prototype.play = function(){
 Game.prototype.replay = function () {
     if (this.canReplay) {
         this.canReplay = false;
-        opponentTray.add(this.lastRemovedCup);
-        opponentTray.add(this.beerRemoved);
+        scene.add(this.lastRemovedCup);
+        scene.add(this.beerRemoved);
+        for(var i = 0; i <  this.miniWallsRemoved.length; i++){
+            scene.add(this.miniWallsRemoved[i]);
+        }
         this.isReplaying = true;
         this.unPause();
     }
@@ -54,25 +61,27 @@ Game.prototype.initCamera = function () {
 
 Game.prototype.checkIfBallIsInCup = function () {
     if (ball.isLaunched && ball.isStopped()) {
-        this.removeCupIfBallIsIn();
+        this.removeCupIfBallIsInOpponent();
         ball.init();
         this.isPaused = true;
     }
 };
 
-Game.prototype.removeCupIfBallIsIn = function () {
+Game.prototype.removeCupIfBallIsInOpponent = function () {
     for(var index = 0; index < scene.cups.length; index++){
         var cup = scene.cups[index];
         if (ball.isInCup(cup) && !cup.removed) {
             cup.removed = true;
-            var cupToRemove = opponentTray.getObjectByName('cup' + index);
-            var beerToRemove = opponentTray.getObjectByName('beer'+index);
+            var cupToRemove = scene.getObjectByName('opponentcup' + index);
+            var beerToRemove = scene.getObjectByName('opponentbeer'+index);
             this.lastRemovedCup = cupToRemove;
             this.beerRemoved = beerToRemove;
-            opponentTray.remove(cupToRemove);
-            opponentTray.remove(beerToRemove);
+            scene.remove(cupToRemove);
+            scene.remove(beerToRemove);
             for (var i = 1; i < 9; i++) {
-                opponentTray.remove(opponentTray.getObjectByName('miniWall'+index+i));
+                var miniWall = scene.getObjectByName('opponent'+index+'miniWall'+i);
+                this.miniWallsRemoved.push(miniWall);
+                scene.remove(miniWall);
             }
             myScreen.updateTheCounterOfDeletedCup();
             this.canReplay = true;
@@ -84,7 +93,6 @@ Game.prototype.removeCupIfBallIsIn = function () {
 
 Game.prototype.playCameraAnimation1 = function () {
     camera.position.set(camera.position.x + (ball.position.y / 20), camera.position.y, camera.position.z);
-    camera.lookAt(opponentTray.position);
 };
 
 Game.prototype.unPause = function(){

@@ -10,14 +10,20 @@ Scene.prototype = new Physijs.Scene;
 Scene.prototype.constructor = Scene;
 
 function Scene () {
-    this.cups = [];
     this.miniWallIndex = 1;
-    this.beerIndex = 1;
-    this.matriceOfCups = [
-                            {x:0,y:7},
-                    {x:-2,y:3.5},{x:2,y:3.5},
-                  {x:-4,y:0},{x:0,y:0},{x:4,y:0},
-    {x:-6,y:-3.5}, {x:-2,y:-3.5}, {x:2,y:-3.5}, {x:6,y:-3.5}
+    this.cups = [];
+
+    this.opponentSetOfCups = [
+        {x:0,z:7-42},
+        {x:-2,z:3.5-42},{x:2,z:3.5-42},
+        {x:-4,z:0-42},{x:0,z:0-42},{x:4,z:0-42},
+        {x:-6,z:-3.5-42}, {x:-2,z:-3.5-42}, {x:2,z:-3.5-42}, {x:6,z:-3.5-42}
+    ];
+    this.mySetOfCups = [
+        {x:0,z:7+4},
+        {x:-2,z:14.5},{x:2,z:14.5},
+        {x:-4,z:18},{x:0,z:18},{x:4,z:18},
+        {x:-6,z:-3.5+25}, {x:-2,z:-3.5+25}, {x:2,z:-3.5+25}, {x:6,z:-3.5+25}
     ];
 }
 
@@ -29,7 +35,7 @@ Scene.prototype.create = function(){
     camera.lookAt(scene.position); 
     cameraControl = new THREE.OrbitControls(camera);
         
-    this.table = new Physijs.PlaneMesh(
+    this.table = new Physijs.BoxMesh(
         new THREE.PlaneGeometry(TABLE_SIZE, TABLE_SIZE * 2.4),
         new THREE.MeshLambertMaterial({map : THREE.ImageUtils.loadTexture("assets/img/beerpongofficial.jpg")})
     );
@@ -44,73 +50,64 @@ Scene.prototype.create = function(){
     renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0xc0c0c0, 1.0);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMapEnabled = true; 
-    
-    myTray = this.createTrayWithCups(-30, 0);
-    opponentTray = this.createTrayWithCups(30, Math.PI);
-    this.table.add(myTray);
-    this.table.add(opponentTray);
-        
+    renderer.shadowMapEnabled = true;
+
+    this.addSetOfCups(this.mySetOfCups, 'my');
+    this.addSetOfCups(this.opponentSetOfCups, 'opponent');
+
     ball = new Ball();
     ball.init();
     scene.add(this.table);
-    
-    for(var index = 0; index < this.cups.length; index++){
-        var value = this.cups[index];
-        this.cups[index].coord = {
-            x : -(value.position.x + value.parent.position.x + value.parent.parent.position.x),
-            y : value.position.y + value.parent.position.y + value.parent.parent.position.z,
-            z : value.position.z + value.parent.position.z + value.parent.parent.position.y
-        };
-        this.cups[index].removed = false;
-    }
 };
 
-Scene.prototype.addCupsOnTray = function(tray){
-    for (var i = 0; i < this.matriceOfCups.length; i++){
+Scene.prototype.addSetOfCups = function(matrix, playerName){
+    for (var i = 0; i < matrix.length; i++) {
         var newcup = cup.clone();
-        newcup.position.set(this.matriceOfCups[i].x, this.matriceOfCups[i].y, 0);
-        newcup.name = 'cup' + i;
-        this.cups.push(newcup);
-        tray.add(newcup);
+        newcup.position.set(matrix[i].x, 0, matrix[i].z);
+        newcup.name = playerName + 'cup' + i;
+        if (playerName == 'opponent'){
+            this.cups.push({
+                playerName: playerName,
+                x: newcup.position.x,
+                y: newcup.position.y,
+                z: newcup.position.z,
+                name: newcup.name,
+                removed: false
+            });
+        }
+        this.add(newcup);
+
+        var beer = new Physijs.CylinderMesh(
+            new THREE.CylinderGeometry(1.6, 1.4, 2, 10),
+            new THREE.MeshBasicMaterial({
+                map : THREE.ImageUtils.loadTexture("assets/img/beer.jpeg")
+            })
+        );
+        beer.name = playerName + 'beer' + i;
+        beer.position.set(matrix[i].x, 1.1, matrix[i].z);
+        this.add(beer);
+
+        this.addMiniWallsAroundCup(i, matrix, playerName);
     }
 };
 
-Scene.prototype.addMiniWallsOnTray = function(tray){
-    for (var i = 0; i < this.matriceOfCups.length; i++){
-        tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x, this.matriceOfCups[i].y + 1.7, 0.5 * Math.PI, 0, i));                     
-        tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x, this.matriceOfCups[i].y - 1.7, 0.5 * Math.PI, 0, i));            
-        tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x + 2, this.matriceOfCups[i].y, 0, 0.5 * Math.PI, i));            
-        tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x - 2, this.matriceOfCups[i].y, 0, 0.5 * Math.PI, i));
-        
-        tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x + (2/1.5), this.matriceOfCups[i].y + (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI, i));
-        tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x - (2/1.5), this.matriceOfCups[i].y + (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI, i));            
-        tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x + (2/1.5), this.matriceOfCups[i].y - (1.7/1.5), 0.5 * Math.PI, 0.25 * Math.PI, i));
-        tray.add(this.createAndPositionMiniWall(this.matriceOfCups[i].x - (2/1.5), this.matriceOfCups[i].y - (1.7/1.5), 0.5 * Math.PI, -0.25 * Math.PI, i));
-    
-        tray.add(this.createBeerInTheCup(this.matriceOfCups[i].x, this.matriceOfCups[i].y, 0.5 * Math.PI, 0, i));                     
+Scene.prototype.addMiniWallsAroundCup = function(i, matrix, playerName){
+    this.add(this.createAndPositionMiniWall(matrix[i].x, matrix[i].z + 1.7, {x:0, y:0, z:0.5 * Math.PI}, i, playerName));
+    this.add(this.createAndPositionMiniWall(matrix[i].x, matrix[i].z - 1.7, {x:0,y:0,z:0.5 * Math.PI}, i, playerName));
+    this.add(this.createAndPositionMiniWall(matrix[i].x + 1.9, matrix[i].z, {x:0,y:0.5*Math.PI,z:0.5*Math.PI}, i, playerName));
+    this.add(this.createAndPositionMiniWall(matrix[i].x - 1.9, matrix[i].z, {x:0,y:0.5*Math.PI,z:0.5 * Math.PI}, i, playerName));
 
-    }
+    this.add(this.createAndPositionMiniWall(matrix[i].x + (2/1.5), matrix[i].z + (1.7/1.5), {x:0,y:0.25 * Math.PI,z:0.5 * Math.PI}, i, playerName));
+    this.add(this.createAndPositionMiniWall(matrix[i].x - (2/1.5), matrix[i].z + (1.7/1.5), {x:0,y:0.75 * Math.PI,z:0.5 * Math.PI}, i, playerName));
+    this.add(this.createAndPositionMiniWall(matrix[i].x + (2/1.5), matrix[i].z - (1.7/1.5), {x:0,y:0.75 * Math.PI,z:0.5 * Math.PI}, i, playerName));
+    this.add(this.createAndPositionMiniWall(matrix[i].x - (2/1.5), matrix[i].z - (1.7/1.5), {x:0,y:0.25 * Math.PI,z:0.5 * Math.PI}, i, playerName));
 };
 
-Scene.prototype.createTrayWithCups = function(y, rotation){
-    var tray = new Physijs.PlaneMesh(
-        new THREE.PlaneGeometry(1,1),
-        new THREE.MeshLambertMaterial({opacity:0.0, color: 'white'})
-    );
-    tray.position.set(0, y, 0);
-    tray.rotation.z = rotation;
-    
-    this.addCupsOnTray(tray);
-    this.addMiniWallsOnTray(tray);
 
-    return tray;
-};
-
-Scene.prototype.createAndPositionMiniWall = function(x, y, rotationX, rotationY, indice){
+Scene.prototype.createAndPositionMiniWall = function(x, z, rotation, indice, playerName){
     var height = MINIWALL_SIZE;
     var width = MINIWALL_SIZE;
-    if(rotationX == 0){
+    if(rotation.x == 0){
         height *= 2.5;
     }else{
         width *= 2.5;
@@ -123,27 +120,14 @@ Scene.prototype.createAndPositionMiniWall = function(x, y, rotationX, rotationY,
             transparent : true
         })
     );
-    miniWall.name = 'miniWall' + indice + this.miniWallIndex;
-    miniWall.position.set(x, y, 2);
-    miniWall.rotation.set(rotationX, rotationY, 0);
+    miniWall.name = playerName + indice + 'miniWall' + this.miniWallIndex;
+    miniWall.position.set(x, 2, z);
+    miniWall.rotation.set(rotation.x, rotation.y, rotation.z);
     
     if(this.miniWallIndex == 8) this.miniWallIndex = 0;
     this.miniWallIndex ++;
     
     return miniWall;
-};
-
-Scene.prototype.createBeerInTheCup = function(x, y, rotationX, rotationY, indice){
-    var beer = new Physijs.CylinderMesh(
-        new THREE.CylinderGeometry(1.5, 1.5, 1, 10),
-        new THREE.MeshBasicMaterial({
-            map : THREE.ImageUtils.loadTexture("assets/img/beer.jpeg")
-        })
-    );
-    beer.name = 'beer' + indice;
-    beer.position.set(x,y,2);
-    beer.rotation.set(Math.PI/2,0,0);    
-    return beer;
 };
 
 Scene.prototype.loadCup = function(){
@@ -152,6 +136,5 @@ Scene.prototype.loadCup = function(){
     loader.load('assets/collada/plasticcup.dae', function(collada){                
         cup = collada.scene;
         cup.scale.set(1.5, 1.5, 1.5);
-        cup.rotation.x = 0.5 * Math.PI;
     });
 };
