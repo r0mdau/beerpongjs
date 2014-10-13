@@ -27,6 +27,13 @@ Ball.prototype.isInCup = function(cup){
         && this.position.y < 3;
 };
 
+Ball.prototype.isOverTable = function(){
+    return this.position.x > scene.table.position.x - (scene.table.geometry.parameters.width / 2)
+        && this.position.x < scene.table.position.x + (scene.table.geometry.parameters.width / 2)
+        && this.position.z > scene.table.position.z - (scene.table.geometry.parameters.height / 2)
+        && this.position.z < scene.table.position.z + (scene.table.geometry.parameters.height / 2);
+};
+
 Ball.prototype.isStopped = function () {
     return this.getLinearVelocity().x === 0 && this.getLinearVelocity().y === 0 && this.getLinearVelocity().z === 0;
 };

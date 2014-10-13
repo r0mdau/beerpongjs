@@ -14,17 +14,19 @@ Game.prototype.init = function(){
 };
 
 Game.prototype.play = function(){
-    if(!game.isPaused){
+    if(!ball.isOverTable()) {
+        this.init();
+    }else if(!this.isPaused){
         if (!ball.isStopped()) {
             ball.isLaunched = true;
         }
         scene.simulate();
-        
+
         if(!this.isReplaying){
             this.checkIfBallIsInCup();
-        }else{               
+        }else{
             if(!ball.isLaunched){
-                ball.launch(ball.lastVelocity);           
+                ball.launch(ball.lastVelocity);
             }else if(ball.isLaunched && !ball.isStopped()) {
                 this.playCameraAnimation1();
             }else{
@@ -37,11 +39,14 @@ Game.prototype.play = function(){
                 this.initCamera();
             }
         }
+    }else if(this.finished()){
+        this.replay();
     }
     myScreen.randomPowerCursor();
 };
 
 Game.prototype.replay = function () {
+    myScreen.replayMessage.hide();
     if (this.canReplay) {
         this.canReplay = false;
         scene.add(this.lastRemovedCup);
@@ -89,6 +94,10 @@ Game.prototype.removeCupIfBallIsInOpponent = function () {
             this.init();
         }
     }
+};
+
+Game.prototype.finished = function(){
+    return parseInt($("#nbcups").text()) <= 0;
 };
 
 Game.prototype.playCameraAnimation1 = function () {

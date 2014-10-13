@@ -2,7 +2,6 @@
 
 function playWhenMyKeyIsPressed(event){
     if (keyMap("r", event)) {
-        myScreen.replayMessage.hide();
         game.replay();
     }else if (event.keyCode == 13) { // enter
         $('#nbtir').text(parseInt($('#nbtir').text()) + 1);
