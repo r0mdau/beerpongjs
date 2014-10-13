@@ -14,7 +14,7 @@
     <script src="assets/js/game.js"></script>
     <script src="assets/js/myscreen.js"></script>
     <script src="assets/js/ball.js"></script>
-
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <style>
         body {
             margin: 0;
@@ -24,22 +24,24 @@
 </head>
 <body>
 	<div id="control" style="position: absolute">
-		<span id="replay" style="display: none">Appuyez sur la touche <b>r</b> pour replay !</span>
-        <h2>Commandes</h2>
-        <ul>
-            <li>Lancer la balle : <b>Entrée</b></li>
-            <li>Initialiser la balle : <b>i</b></li>
-            <li>Vers la gauche : <b>k</b></li>
-            <li>Vers la droite : <b>m</b></li>
-        </ul>
 		<p>Direction :</p>
 		<input type="range" id="direction" value="0" min="-7" max="7"/>
 		<p>Puissance :</p>
 		<input type="range" id="puissance" value="35" min="20" max="50"/>
-        <p>Cups restantes : <span id="nbcups">10</span></p>
-        <p>Nombre de tirs : <span id="nbtir">0</span></p>
 		<br/>
 	</div>
+
+    <div id="commande" style="position: absolute">
+        <h2>Commandes</h2>
+        Lancer la balle : <b>Entrée</b><br/>
+        <span id="replay" style="display: none">Appuyez sur la touche <b>r</b> pour replay !</span>
+    </div>
+
+    <div id="score" style="position: absolute">
+        <p>Cups restantes : <span id="nbcups">10</span></p>
+        <p>Nombre de tirs : <span id="nbtir">0</span></p>
+    </div>
+
 <script>
     'use strict';
 

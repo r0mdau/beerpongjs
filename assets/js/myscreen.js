@@ -21,13 +21,24 @@ MyScreen.prototype.updateStats = function() {
     this.stats.update();
 };
 
-MyScreen.prototype.initGameMenu = function() {    
-    this.div.css({
+MyScreen.prototype.initGameMenu = function() {
+    
+    $('#commande').css({
+        "right" : (window.innerWidth - this.div.width() - 50)+"px",
+        "bottom" : (window.innerHeight - this.div.height() - 150)+"px",
+        "font-family" : "Ubuntu"
+    });
+
+    $("#score").css({
         "left" : (window.innerWidth - this.div.width() - 50)+"px",
-        "top" : (window.innerHeight - this.div.height() - 50)+"px",
-        "border-radius" : "10px",
-        "border" : "1px solid black",
-        "font-family" : "Helvetica"
+        "bottom" : (window.innerHeight - this.div.height() + 30)+"px",
+        "font-family" : "Ubuntu"
+    });
+
+    $("#control").css({
+        "left" : (window.innerWidth - this.div.width() - 50)+"px",
+        "top" : (window.innerHeight - this.div.height() - 30)+"px",
+        "font-family" : "Ubuntu"
     });
 };
 
