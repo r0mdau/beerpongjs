@@ -43,6 +43,14 @@ Scene.prototype.create = function(){
     this.table.position.set(0, 0, -12);
     this.table.rotation.x = -0.5 * Math.PI;
 
+    var threeTable = new THREE.Mesh(
+        new THREE.BoxGeometry(TABLE_SIZE, TABLE_SIZE * 2.4, 2),
+        new THREE.MeshLambertMaterial({color : 'white'})
+    );
+    threeTable.position.set(0, -1.1, -12);
+    threeTable.rotation.x = -0.5 * Math.PI;
+    scene.add(threeTable);
+
     var spotLight = new THREE.SpotLight(0xffffff);
     spotLight.position.set(0, 70, 30);
     scene.add(spotLight);
