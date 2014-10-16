@@ -10,12 +10,12 @@ function MyScreen () {
 
 MyScreen.prototype.checkWebglCompatibility = function () {
     if (!window.WebGLRenderingContext) {
-        window.location = "http://get.webgl.org";
+        $('body').html('').append('<iframe src="http://get.webgl.org" height="600" width=100%"></iframe>');
     } else {
         var canvas = document.getElementById("myCanvas");
         var context = canvas.getContext("webgl");
         if (!context) {
-            window.location = "http://get.webgl.org/troubleshooting";
+            $('body').html('').append('<iframe src="http://get.webgl.org" height="600" width=100%"></iframe>');
         }
     }
 };
