@@ -1,11 +1,24 @@
 'use strict';
 
 function MyScreen () {
+    this.checkWebglCompatibility();
     this.powerCursorVal = 20;
     this.toIncrease = true;
     this.div = $('#control');
     this.replayMessage = $('#replay');
 }
+
+MyScreen.prototype.checkWebglCompatibility = function () {
+    if (!window.WebGLRenderingContext) {
+        window.location = "http://get.webgl.org";
+    } else {
+        var canvas = document.getElementById("myCanvas");
+        var context = canvas.getContext("webgl");
+        if (!context) {
+            window.location = "http://get.webgl.org/troubleshooting";
+        }
+    }
+};
 
 MyScreen.prototype.addStatsObject = function() {
     this.stats = new Stats();

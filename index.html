@@ -23,6 +23,7 @@
     </style>
 </head>
 <body>
+    <canvas id="myCanvas" width="350" height="350" style="display: none"></canvas>
 	<div id="control" style="position: absolute">
 		<p>Direction :</p>
 		<input type="range" id="direction" value="0" min="-7" max="7"/>
@@ -52,11 +53,11 @@
     var cup, ball;
 	
 	$(document).ready(function() {
+        myScreen = new MyScreen();
         scene = new Scene();
 		scene.create();
 		game = new Game();
-        
-        myScreen = new MyScreen();
+
         myScreen.initGameMenu();
         myScreen.addStatsObject();
         document.body.appendChild(renderer.domElement);
