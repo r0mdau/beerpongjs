@@ -8,9 +8,9 @@
     <script src="libs/stats.min.js"></script>
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
-	<script src="libs/jquery-1.11.1.min.js"></script>    
-	<script src="assets/js/whenMyKeyIsPressed.js"></script>
-	<script src="assets/js/scene.js"></script>
+    <script src="libs/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/whenMyKeyIsPressed.js"></script>
+    <script src="assets/js/scene.js"></script>
     <script src="assets/js/game.js"></script>
     <script src="assets/js/myscreen.js"></script>
     <script src="assets/js/ball.js"></script>
@@ -23,64 +23,93 @@
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="350" height="350" style="display: none"></canvas>
-	<div id="control" style="position: absolute">
-		<p>Direction :</p>
-		<input type="range" id="direction" value="0" min="-7" max="7"/>
-		<p>Puissance :</p>
-		<input type="range" id="puissance" value="35" min="20" max="50"/>
-		<br/>
-	</div>
+<canvas id="myCanvas" width="350" height="350" style="display: none"></canvas>
+<div id="control" style="position: absolute">
+    <p>Direction :</p>
+    <input type="range" id="direction" value="0" min="-7" max="7"/>
 
-    <div id="commande" style="position: absolute">
-        <h2>Commandes</h2>
-        Lancer la balle : <b>Entrée</b><br/>
-        <span id="replay" style="display: none">Appuyez sur la touche <b>r</b> pour replay !</span>
-    </div>
+    <p>Puissance :</p>
+    <input type="range" id="puissance" value="35" min="20" max="50"/>
+    <br/>
+</div>
 
-    <div id="score" style="position: absolute">
-        <p>Cups restantes : <span id="nbcups">10</span></p>
-        <p>Nombre de tirs : <span id="nbtir">0</span></p>
-    </div>
+<div id="commande" style="position: absolute">
+    <h2>Commandes</h2>
+    <span>Lancer la balle : <b>Entrée</b></span><br/>
+    <span id="replay" style="display: none">Appuyez sur la touche <b>r</b> pour replay !</span><br>
+    <span id="missingPlayer" style="display: none;color:red">Il manque le second joueur</span><br>
+    <h3 id="message" style="display: none; color:green">A vous de jouer !</h3>
+</div>
 
+<div id="score" style="position: absolute">
+    <p>Cups restantes : <span id="nbcups">10</span></p>
+
+    <p>Nombre de tirs : <span id="nbtir">0</span></p>
+</div>
+
+<script src="http://webservice.ovh/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
     'use strict';
 
-	var game, myScreen;
+    var game, myScreen;
     var renderer;
     var scene;
     var camera, cameraControl;
     var cup, ball;
-	
-	$(document).ready(function() {
+    var socket;
+    var canPlay = false;
+
+    $(document).ready(function () {
+        socket = io('http://webservice.ovh');
         myScreen = new MyScreen();
         scene = new Scene();
-		scene.create();
-		game = new Game();
+        scene.create();
+        game = new Game();
+
+        socket.on('canPlay', function (bool) {
+            canPlay = eval(bool);
+        });
+
+        socket.on('players', function (nb) {
+            if(parseInt(nb) == 1){
+                $('#message').show();
+            }
+            if (parseInt(nb) < 2) {
+                $('#missingPlayer').show();
+            } else {
+                $('#missingPlayer').hide();
+            }
+        });
+
+        socket.on('velocity', function (velocity) {
+            ball.launch(JSON.parse(velocity));
+            game.unPause();
+        });
 
         myScreen.initGameMenu();
         myScreen.addStatsObject();
         document.body.appendChild(renderer.domElement);
         render();
     });
-    
-    function render() {        
+
+    function render() {
         game.play();
-        
+
         myScreen.updateStats();
         cameraControl.update();
         requestAnimationFrame(render);
         renderer.render(scene, camera);
     }
-    
-    $(document).keypress(function(e) {
+
+    $(document).keypress(function (e) {
         if (!ball.isLaunched) {
             playWhenMyKeyIsPressed(e);
         }
         doThingsWhenMyKeyIsPressed(e);
     });
-	
-	$(window).resize(function() {
+
+    $(window).resize(function () {
         myScreen.initGameMenu();
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();

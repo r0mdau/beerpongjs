@@ -11,6 +11,9 @@ Game.prototype.init = function(){
     this.isPaused = true;
     this.isReplaying = false;
 	ball.init();
+    if (canPlay) {
+        $('#message').show();
+    }
 };
 
 Game.prototype.play = function(){
