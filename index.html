@@ -8,9 +8,9 @@
     <script src="libs/stats.min.js"></script>
     <script src="libs/OrbitControls.js"></script>
     <script src="libs/ColladaLoader.js"></script>
-	<script src="libs/jquery-1.11.1.min.js"></script>    
-	<script src="assets/js/whenMyKeyIsPressed.js"></script>
-	<script src="assets/js/scene.js"></script>
+    <script src="libs/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/whenMyKeyIsPressed.js"></script>
+    <script src="assets/js/scene.js"></script>
     <script src="assets/js/game.js"></script>
     <script src="assets/js/myscreen.js"></script>
     <script src="assets/js/ball.js"></script>
@@ -23,64 +23,66 @@
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="350" height="350" style="display: none"></canvas>
-	<div id="control" style="position: absolute">
-		<p>Direction :</p>
-		<input type="range" id="direction" value="0" min="-7" max="7"/>
-		<p>Puissance :</p>
-		<input type="range" id="puissance" value="35" min="20" max="50"/>
-		<br/>
-	</div>
+<canvas id="myCanvas" width="350" height="350" style="display: none"></canvas>
+<div id="control" style="position: absolute">
+    <p>Direction :</p>
+    <input type="range" id="direction" value="0" min="-7" max="7"/>
 
-    <div id="commande" style="position: absolute">
-        <h2>Commandes</h2>
-        Lancer la balle : <b>Entrée</b><br/>
-        <span id="replay" style="display: none">Appuyez sur la touche <b>r</b> pour replay !</span>
-    </div>
+    <p>Puissance :</p>
+    <input type="range" id="puissance" value="35" min="20" max="50"/>
+    <br/>
+</div>
 
-    <div id="score" style="position: absolute">
-        <p>Cups restantes : <span id="nbcups">10</span></p>
-        <p>Nombre de tirs : <span id="nbtir">0</span></p>
-    </div>
+<div id="commande" style="position: absolute">
+    <h2>Commandes</h2>
+    Lancer la balle : <b>Entrée</b><br/>
+    <span id="replay" style="display: none">Appuyez sur la touche <b>r</b> pour replay !</span>
+</div>
+
+<div id="score" style="position: absolute">
+    <p>Cups restantes : <span id="nbcups">10</span></p>
+
+    <p>Nombre de tirs : <span id="nbtir">0</span></p>
+</div>
 
 <script>
     'use strict';
 
-	var game, myScreen;
+    var game, myScreen;
     var renderer;
     var scene;
     var camera, cameraControl;
     var cup, ball;
-	
-	$(document).ready(function() {
+
+    $(document).ready(function () {
         myScreen = new MyScreen();
         scene = new Scene();
-		scene.create();
-		game = new Game();
+        scene.create();
+        game = new Game();
 
         myScreen.initGameMenu();
         myScreen.addStatsObject();
         document.body.appendChild(renderer.domElement);
         render();
     });
-    
-    function render() {        
+
+    function render() {
         game.play();
-        
+
         myScreen.updateStats();
         cameraControl.update();
         requestAnimationFrame(render);
         renderer.render(scene, camera);
     }
-    
-    $(document).keypress(function(e) {
+
+    $(document).keypress(function (e) {
         if (!ball.isLaunched) {
             playWhenMyKeyIsPressed(e);
         }
         doThingsWhenMyKeyIsPressed(e);
     });
-	
-	$(window).resize(function() {
+
+    $(window).resize(function () {
         myScreen.initGameMenu();
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();

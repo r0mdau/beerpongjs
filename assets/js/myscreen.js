@@ -1,6 +1,6 @@
 'use strict';
 
-function MyScreen () {
+function MyScreen() {
     this.checkWebglCompatibility();
     this.powerCursorVal = 20;
     this.toIncrease = true;
@@ -20,7 +20,7 @@ MyScreen.prototype.checkWebglCompatibility = function () {
     }
 };
 
-MyScreen.prototype.addStatsObject = function() {
+MyScreen.prototype.addStatsObject = function () {
     this.stats = new Stats();
     this.stats.setMode(0);
     this.stats.domElement.style.position = 'absolute';
@@ -30,46 +30,46 @@ MyScreen.prototype.addStatsObject = function() {
     $('body').append(this.stats.domElement);
 };
 
-MyScreen.prototype.updateStats = function() {
+MyScreen.prototype.updateStats = function () {
     this.stats.update();
 };
 
-MyScreen.prototype.initGameMenu = function() {
-    
+MyScreen.prototype.initGameMenu = function () {
+
     $('#commande').css({
-        "right" : (window.innerWidth - this.div.width() - 50)+"px",
-        "bottom" : (window.innerHeight - this.div.height() - 150)+"px",
-        "font-family" : "Ubuntu"
+        "right": (window.innerWidth - this.div.width() - 50) + "px",
+        "bottom": (window.innerHeight - this.div.height() - 150) + "px",
+        "font-family": "Ubuntu"
     });
 
     $("#score").css({
-        "left" : (window.innerWidth - this.div.width() - 50)+"px",
-        "bottom" : (window.innerHeight - this.div.height() + 30)+"px",
-        "font-family" : "Ubuntu"
+        "left": (window.innerWidth - this.div.width() - 50) + "px",
+        "bottom": (window.innerHeight - this.div.height() + 30) + "px",
+        "font-family": "Ubuntu"
     });
 
     $("#control").css({
-        "left" : (window.innerWidth - this.div.width() - 50)+"px",
-        "top" : (window.innerHeight - this.div.height() - 30)+"px",
-        "font-family" : "Ubuntu"
+        "left": (window.innerWidth - this.div.width() - 50) + "px",
+        "top": (window.innerHeight - this.div.height() - 30) + "px",
+        "font-family": "Ubuntu"
     });
 };
 
-MyScreen.prototype.randomPowerCursor = function (){
+MyScreen.prototype.randomPowerCursor = function () {
     $('#puissance').val(this.powerCursorVal);
     if (this.toIncrease) {
         this.powerCursorVal++;
-    }else{
+    } else {
         this.powerCursorVal--;
     }
-    
+
     if (this.powerCursorVal > 49) {
         this.toIncrease = false;
-    }else if(this.powerCursorVal < 21){
+    } else if (this.powerCursorVal < 21) {
         this.toIncrease = true;
     }
 };
 
-MyScreen.prototype.updateTheCounterOfDeletedCup = function (){
+MyScreen.prototype.updateTheCounterOfDeletedCup = function () {
     $("#nbcups").text($("#nbcups").text() - 1);
 };
