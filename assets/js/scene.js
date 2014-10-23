@@ -74,24 +74,18 @@ Scene.prototype.addSetOfCups = function (matrix, playerName) {
         var newcup = cup.clone();
         newcup.position.set(matrix[i].x, 0, matrix[i].z);
         newcup.name = playerName + 'cup' + i;
+        var sceneCup = {
+            playerName: playerName,
+            x: newcup.position.x,
+            y: newcup.position.y,
+            z: newcup.position.z,
+            name: newcup.name,
+            removed: false
+        };
         if (playerName == 'opponent') {
-            this.cups.push({
-                playerName: playerName,
-                x: newcup.position.x,
-                y: newcup.position.y,
-                z: newcup.position.z,
-                name: newcup.name,
-                removed: false
-            });
+            this.cups.push(sceneCup);
         }else{
-            this.cupsM.push({
-                playerName: playerName,
-                x: newcup.position.x,
-                y: newcup.position.y,
-                z: newcup.position.z,
-                name: newcup.name,
-                removed: false
-            });
+            this.cupsM.push(sceneCup);
         }
         this.add(newcup);
 
