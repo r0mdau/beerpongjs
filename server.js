@@ -17,8 +17,7 @@ io.sockets.on('connection', function (socket) {
             socket.emit('canPlay', 'false');
             socket.broadcast.emit('canPlay', 'true');
         }
-        socket.emit('players', players.length);
-        socket.broadcast.emit('players', players.length);
+        io.emit('players', players.length);
         console.log('user connected');
 
         socket.on('velocity', function (msg) {
