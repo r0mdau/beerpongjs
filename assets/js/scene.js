@@ -12,6 +12,7 @@ Scene.prototype.constructor = Scene;
 function Scene() {
     this.miniWallIndex = 1;
     this.cups = [];
+    this.cupsM = [];
 
     this.opponentSetOfCups = [
         {x: 0, z: 7 - 42},
@@ -75,6 +76,15 @@ Scene.prototype.addSetOfCups = function (matrix, playerName) {
         newcup.name = playerName + 'cup' + i;
         if (playerName == 'opponent') {
             this.cups.push({
+                playerName: playerName,
+                x: newcup.position.x,
+                y: newcup.position.y,
+                z: newcup.position.z,
+                name: newcup.name,
+                removed: false
+            });
+        }else{
+            this.cupsM.push({
                 playerName: playerName,
                 x: newcup.position.x,
                 y: newcup.position.y,

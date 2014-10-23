@@ -5,7 +5,6 @@ function MyScreen() {
     this.powerCursorVal = 20;
     this.toIncrease = true;
     this.div = $('#control');
-    this.replayMessage = $('#replay');
 }
 
 MyScreen.prototype.checkWebglCompatibility = function () {

@@ -2,9 +2,7 @@
 
 function playWhenMyKeyIsPressed(event) {
     if (canPlay) {
-        if (keyMap("r", event)) {
-            game.replay();
-        } else if (event.keyCode == 13) { // enter
+        if (event.keyCode == 13) { // enter
             canPlay = false;
             $('#message').hide();
 
