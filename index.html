@@ -73,7 +73,6 @@
         });
 
         socket.on('nickname', function (nick) {
-            console.log(nick);
             $('#commande').append($('<p>').text(
                     'Votre pseudo : ' + nick
             ))
