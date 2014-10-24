@@ -72,6 +72,19 @@
             canPlay = eval(bool);
         });
 
+        socket.on('nickname', function (nick) {
+            console.log(nick);
+            $('#commande').append($('<p>').text(
+                    'Votre pseudo : ' + nick
+            ))
+        });
+
+        socket.on('oNick', function (nick) {
+            $('#commande').append($('<p>').text(
+                    'Adversaire : ' + nick
+            ));
+        });
+
         socket.on('players', function (nb) {
             if (parseInt(nb) == 1) {
                 $('#message').show();
