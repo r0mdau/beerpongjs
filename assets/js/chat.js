@@ -26,9 +26,9 @@ $(function() {
     function addParticipantsMessage (data) {
         var message = '';
         if (data.numUsers === 1) {
-            message += "there's 1 participant";
+            message += "Il y 1 participant";
         } else {
-            message += "there are " + data.numUsers + " participants";
+            message += "Il y a " + data.numUsers + " participants";
         }
         log(message);
     }
@@ -190,7 +190,7 @@ $(function() {
 
     socket.on('login', function (data) {
         connected = true;
-        var message = "Welcome to beerpongJs Chat !";
+        var message = "Bienvenue sur le chat de beergponJs !";
         log(message, {
             prepend: true
         });
@@ -202,12 +202,12 @@ $(function() {
     });
 
     socket.on('user joined', function (data) {
-        log(data.username + ' joined');
+        log(data.username + ' a rejoint');
         addParticipantsMessage(data);
     });
 
     socket.on('user left', function (data) {
-        log(data.username + ' left');
+        log(data.username + ' est parti');
         addParticipantsMessage(data);
         removeChatTyping(data);
     });
