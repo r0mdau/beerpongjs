@@ -37,7 +37,7 @@ MyScreen.prototype.initGameMenu = function () {
 
     $('#commande').css({
         "right": (window.innerWidth - this.div.width() - 50) + "px",
-        "bottom": (window.innerHeight - this.div.height() - 150) + "px",
+        "top": "30px",
         "font-family": "Ubuntu"
     });
 

@@ -3,7 +3,7 @@
 var MINIWALL_SIZE = 1.4;
 var TABLE_SIZE = 30;
 
-Physijs.scripts.worker = 'libs/physijs_worker.js';
+Physijs.scripts.worker = 'libs/js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
 
 Scene.prototype = new Physijs.Scene;
