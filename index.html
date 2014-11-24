@@ -63,7 +63,7 @@
     var canPlay = false;
 
     $(document).ready(function () {
-        socket = io('http://webservice.ovh');
+        socket = io('http://webservice.ovh:8001');
         myScreen = new MyScreen();
         scene = new Scene();
         scene.create();
