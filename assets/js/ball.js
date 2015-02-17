@@ -16,7 +16,13 @@ Ball.prototype.init = function () {
     scene.add(this);
 };
 
-Ball.prototype.launch = function (velocity) {
+Ball.prototype.initWithPos = function(vector){
+    this.position.set(vector.x, vector.y, vector.z);
+    this.isLaunched = false;
+    scene.add(this);
+};
+
+Ball.prototype.launch = function(velocity){
     this.lastVelocity = velocity;
     this.setLinearVelocity(velocity);
 };

@@ -1,24 +1,18 @@
 'use strict';
 
 function playWhenMyKeyIsPressed(event) {
-    if (keyMap("r", event)) {
-        game.replay();
-    } else if (event.keyCode == 13) { // enter
-        $('#nbtir').text(parseInt($('#nbtir').text()) + 1);
-        ball.launch({x: $('#direction').val(), y: 2, z: -$('#puissance').val()});
-        game.unPause();
-    } else if (keyMap("a", event)) { // CHEAT POUR TESTS
-        $('#nbtir').text(parseInt($('#nbtir').text()) + 1);
-        ball.launch({x: 0, y: 2, z: -32.5});
-        game.unPause();
-    } else if (keyMap("z", event)) { // CHEAT POUR TESTS
-        $('#nbtir').text(parseInt($('#nbtir').text()) + 1);
-        ball.launch({x: -3.5, y: 2, z: -39});
-        game.unPause();
-    } else if (keyMap("e", event)) { // CHEAT POUR TESTS
-        $('#nbtir').text(parseInt($('#nbtir').text()) + 1);
-        ball.launch({x: 3.5, y: 2, z: -39});
-        game.unPause();
+    if (canPlay) {
+        if (event.keyCode == 13) { // enter
+            canPlay = false;
+            $('#message').hide();
+
+            $('#nbtir').text(parseInt($('#nbtir').text()) + 1);
+
+            var velocity = {x: $('#direction').val(), y: 2, z: -$('#puissance').val()};
+            socket.emit('velocity', JSON.stringify(velocity));
+            ball.launch(velocity);
+            game.unPause();
+        }
     }
 }
 
@@ -28,9 +22,7 @@ function doThingsWhenMyKeyIsPressed(event) {
     var dirMin = parseInt(dir.attr('min'));
     var dirMax = parseInt(dir.attr('max'));
 
-    if (keyMap("i", event)) {
-        game.init();
-    } else if (keyMap("k", event)) {
+    if (keyMap("k", event)) {
         if (dirVal > dirMin) {
             dir.val(dirVal - 1);
         }
@@ -38,10 +30,8 @@ function doThingsWhenMyKeyIsPressed(event) {
         if (dirVal < dirMax) {
             dir.val(dirVal + 1);
         }
-    } else if (keyMap("o", event)) {
-        game.unPause()
-    } else if (keyMap("p", event)) {
-        game.isPaused = true;
+    } else if (keyMap("c", event)) {
+        window.open('chat.html', 'beerpongjs chat', 'menubar=no, scrollbars=no, top=100, left=100, width=500, height=300');
     }
 }
 

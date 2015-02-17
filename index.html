@@ -3,18 +3,18 @@
 <head>
     <title>beerpongJs</title>
     <meta charset="utf-8"/>
-    <script src="libs/three.js"></script>
-    <script src="libs/physi.js"></script>
-    <script src="libs/stats.min.js"></script>
-    <script src="libs/OrbitControls.js"></script>
-    <script src="libs/ColladaLoader.js"></script>
-    <script src="libs/jquery-1.11.1.min.js"></script>
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet" type="text/css">
+    <script src="libs/js/three.js"></script>
+    <script src="libs/js/physi.js"></script>
+    <script src="libs/js/stats.min.js"></script>
+    <script src="libs/js/OrbitControls.js"></script>
+    <script src="libs/js/ColladaLoader.js"></script>
+    <script src="libs/js/jquery-1.11.1.min.js"></script>
     <script src="assets/js/whenMyKeyIsPressed.js"></script>
     <script src="assets/js/scene.js"></script>
     <script src="assets/js/game.js"></script>
     <script src="assets/js/myscreen.js"></script>
     <script src="assets/js/ball.js"></script>
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
     <style>
         body {
             margin: 0;
@@ -24,6 +24,7 @@
 </head>
 <body>
 <canvas id="myCanvas" width="350" height="350" style="display: none"></canvas>
+
 <div id="control" style="position: absolute">
     <p>Direction :</p>
     <input type="range" id="direction" value="0" min="-7" max="7"/>
@@ -35,10 +36,12 @@
 
 <div id="commande" style="position: absolute">
     <h2>Commandes</h2>
-    Lancer la balle : <b>Entrée</b><br/>
-    Vers la gauche : <b>k</b><br/>
-    Vers la droite : <b>m</b><br/>
-    <span id="replay" style="display: none">Appuyez sur la touche <b>r</b> pour replay !</span>
+    <span>Lancer la balle : <b>Entrée</b></span><br/>
+    <span>Ouvrir le chat : touche <b>C</b></span><br/><br/>
+    <span id="missingPlayer" style="display: none;color:red">Il manque le second joueur</span><br>
+
+    <h3 id="message" style="display: none; color:green">A vous de jouer !</h3>
+    <span>Si ce n'est pas à vous de jouer, c'est à l'autre ...</span>
 </div>
 
 <div id="score" style="position: absolute">
@@ -47,6 +50,7 @@
     <p>Nombre de tirs : <span id="nbtir">0</span></p>
 </div>
 
+<script src="http://webservice.ovh:8001/socket.io/socket.io.js"></script>
 <script>
     'use strict';
 
@@ -55,12 +59,49 @@
     var scene;
     var camera, cameraControl;
     var cup, ball;
+    var socket;
+    var canPlay = false;
 
     $(document).ready(function () {
+        socket = io('http://webservice.ovh:8001');
         myScreen = new MyScreen();
         scene = new Scene();
         scene.create();
         game = new Game();
+
+        socket.on('canPlay', function (bool) {
+            canPlay = eval(bool);
+        });
+
+        socket.on('nickname', function (nick) {
+            $('#commande').append($('<p>').text(
+                    'Votre identifiant : ' + nick
+            ))
+        });
+
+        socket.on('oNick', function (nick) {
+            $('#commande').append($('<p>').text(
+                    'Adversaire : ' + nick
+            ));
+        });
+
+        socket.on('players', function (nb) {
+            if (parseInt(nb) == 1) {
+                $('#message').show();
+            }
+            if (parseInt(nb) < 2) {
+                $('#missingPlayer').show();
+            } else {
+                $('#missingPlayer').hide();
+            }
+        });
+
+        socket.on('velocity', function (velocity) {
+            ball.initWithPos({x: 0, y: 15, z: -44});
+            velocity = JSON.parse(velocity);
+            ball.launch({x: -velocity.x, y: velocity.y, z: -velocity.z});
+            game.unPause();
+        });
 
         myScreen.initGameMenu();
         myScreen.addStatsObject();

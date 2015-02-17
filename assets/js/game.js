@@ -2,15 +2,15 @@
 
 function Game() {
     this.isPaused = true;
-    this.isReplaying = false;
-    this.canReplay = false;
     this.miniWallsRemoved = [];
 }
 
 Game.prototype.init = function () {
     this.isPaused = true;
-    this.isReplaying = false;
-    ball.init();
+	ball.init();
+    if (canPlay) {
+        $('#message').show();
+    }
 };
 
 Game.prototype.play = function () {
@@ -22,41 +22,13 @@ Game.prototype.play = function () {
         }
         scene.simulate();
 
-        if (!this.isReplaying) {
+        if (!ball.isLaunched) {
+            ball.launch(ball.lastVelocity);
+        }else if(ball.isLaunched && ball.isStopped()){
             this.checkIfBallIsInCup();
-        } else {
-            if (!ball.isLaunched) {
-                ball.launch(ball.lastVelocity);
-            } else if (ball.isLaunched && !ball.isStopped()) {
-                this.playCameraAnimation1();
-            } else {
-                scene.remove(this.lastRemovedCup);
-                scene.remove(this.beerRemoved);
-                for (var i = 0; i < this.miniWallsRemoved.length; i++) {
-                    scene.remove(this.miniWallsRemoved[i]);
-                }
-                this.init();
-                this.initCamera();
-            }
         }
-    } else if (this.finished()) {
-        this.replay();
     }
     myScreen.randomPowerCursor();
-};
-
-Game.prototype.replay = function () {
-    myScreen.replayMessage.hide();
-    if (this.canReplay) {
-        this.canReplay = false;
-        scene.add(this.lastRemovedCup);
-        scene.add(this.beerRemoved);
-        for (var i = 0; i < this.miniWallsRemoved.length; i++) {
-            scene.add(this.miniWallsRemoved[i]);
-        }
-        this.isReplaying = true;
-        this.unPause();
-    }
 };
 
 Game.prototype.initCamera = function () {
@@ -67,8 +39,30 @@ Game.prototype.initCamera = function () {
 Game.prototype.checkIfBallIsInCup = function () {
     if (ball.isLaunched && ball.isStopped()) {
         this.removeCupIfBallIsInOpponent();
+        this.removeCupIfBallIsInMine();
         ball.init();
         this.isPaused = true;
+    }
+};
+
+Game.prototype.removeCupIfBallIsInMine = function () {
+    for (var index = 0; index < scene.cupsM.length; index++) {
+        var cup = scene.cupsM[index];
+        if (ball.isInCup(cup) && !cup.removed) {
+            cup.removed = true;
+            var cupToRemove = scene.getObjectByName('mycup' + index);
+            var beerToRemove = scene.getObjectByName('mybeer' + index);
+            this.lastRemovedCup = cupToRemove;
+            this.beerRemoved = beerToRemove;
+            scene.remove(cupToRemove);
+            scene.remove(beerToRemove);
+            for (var i = 1; i < 9; i++) {
+                var miniWall = scene.getObjectByName('my' + index + 'miniWall' + i);
+                this.miniWallsRemoved.push(miniWall);
+                scene.remove(miniWall);
+            }
+            this.init();
+        }
     }
 };
 
@@ -89,8 +83,6 @@ Game.prototype.removeCupIfBallIsInOpponent = function () {
                 scene.remove(miniWall);
             }
             myScreen.updateTheCounterOfDeletedCup();
-            this.canReplay = true;
-            myScreen.replayMessage.show();
             this.init();
         }
     }
@@ -100,7 +92,7 @@ Game.prototype.finished = function () {
     return parseInt($("#nbcups").text()) <= 0;
 };
 
-Game.prototype.playCameraAnimation1 = function () {
+Game.prototype.playCameraAnimation = function () {
     camera.position.set(camera.position.x + (ball.position.y / 20), camera.position.y, camera.position.z);
 };
 

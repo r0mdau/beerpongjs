@@ -3,7 +3,7 @@
 var MINIWALL_SIZE = 1.4;
 var TABLE_SIZE = 30;
 
-Physijs.scripts.worker = 'libs/physijs_worker.js';
+Physijs.scripts.worker = 'libs/js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
 
 Scene.prototype = new Physijs.Scene;
@@ -12,6 +12,7 @@ Scene.prototype.constructor = Scene;
 function Scene() {
     this.miniWallIndex = 1;
     this.cups = [];
+    this.cupsM = [];
 
     this.opponentSetOfCups = [
         {x: 0, z: 7 - 42},
@@ -73,15 +74,18 @@ Scene.prototype.addSetOfCups = function (matrix, playerName) {
         var newcup = cup.clone();
         newcup.position.set(matrix[i].x, 0, matrix[i].z);
         newcup.name = playerName + 'cup' + i;
+        var sceneCup = {
+            playerName: playerName,
+            x: newcup.position.x,
+            y: newcup.position.y,
+            z: newcup.position.z,
+            name: newcup.name,
+            removed: false
+        };
         if (playerName == 'opponent') {
-            this.cups.push({
-                playerName: playerName,
-                x: newcup.position.x,
-                y: newcup.position.y,
-                z: newcup.position.z,
-                name: newcup.name,
-                removed: false
-            });
+            this.cups.push(sceneCup);
+        }else{
+            this.cupsM.push(sceneCup);
         }
         this.add(newcup);
 
