@@ -105,6 +105,11 @@
             game.unPause();
         });
 
+        socket.on('cupToRemove', function (index) {
+            console.log(index);
+            game.removeMyCup(index);
+        });
+
         myScreen.initGameMenu();
         myScreen.addStatsObject();
         document.body.appendChild(renderer.domElement);

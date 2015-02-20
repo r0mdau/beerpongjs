@@ -1,4 +1,4 @@
-var io = require('socket.io').listen(80);
+var io = require('socket.io').listen(8001);
 
 var players = {};
 
@@ -55,6 +55,10 @@ io.sockets.on('connection', function (socket) {
 
             console.log(this.id + ' : ' + msg);
         }
+    });
+
+    socket.on('removeCup', function (index) {
+        this.broadcast.to(players[this.id].associatedId).emit('cupToRemove', index);
     });
 
     socket.on('disconnect', function () {
