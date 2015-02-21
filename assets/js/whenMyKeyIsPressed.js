@@ -3,7 +3,6 @@
 function playWhenMyKeyIsPressed(event) {
     if (canPlay) {
         if (event.keyCode == 13) { // enter
-            canPlay = false;
             $('#message').hide();
 
             $('#nbtir').text(parseInt($('#nbtir').text()) + 1);

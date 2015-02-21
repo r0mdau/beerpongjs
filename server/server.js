@@ -46,14 +46,15 @@ io.sockets.on('connection', function (socket) {
     socket.on('velocity', function (msg) {
         if (players[this.id].canPlay && players[this.id].associatedId) {
             this.broadcast.to(players[this.id].associatedId).emit('velocity', msg);
+        }
+    });
+
+    socket.on('hasPlayed', function(){
+        if (players[this.id].canPlay && players[this.id].associatedId) {
             this.broadcast.to(players[this.id].associatedId).emit('canPlay', 'true');
-
+            this.emit('canPlay', 'false');
             players[this.id].canPlay = false;
-            if (players[players[this.id].associatedId]) {
-                players[players[this.id].associatedId].canPlay = true;
-            }
-
-            console.log(this.id + ' : ' + msg);
+            players[players[this.id].associatedId].canPlay = true;
         }
     });
 

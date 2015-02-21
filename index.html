@@ -73,6 +73,10 @@
 
         socket.on('canPlay', function (bool) {
             canPlay = eval(bool);
+            if(canPlay){
+                $('#message').show();
+                game.init();
+            }
         });
 
         socket.on('nickname', function (nick) {
@@ -88,9 +92,6 @@
         });
 
         socket.on('players', function (nb) {
-            if (parseInt(nb) == 1) {
-                $('#message').show();
-            }
             if (parseInt(nb) < 2) {
                 $('#missingPlayer').show();
             } else {
@@ -106,8 +107,8 @@
         });
 
         socket.on('cupToRemove', function (index) {
-            console.log(index);
             game.removeMyCup(index);
+            game.init();
         });
 
         myScreen.initGameMenu();
