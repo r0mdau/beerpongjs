@@ -1,20 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
     <title>beerpongJs</title>
     <meta charset="utf-8"/>
     <link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet" type="text/css">
-    <script src="libs/js/three.js"></script>
-    <script src="libs/js/physi.js"></script>
-    <script src="libs/js/stats.min.js"></script>
-    <script src="libs/js/OrbitControls.js"></script>
-    <script src="libs/js/ColladaLoader.js"></script>
-    <script src="libs/js/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/whenMyKeyIsPressed.js"></script>
-    <script src="assets/js/scene.js"></script>
-    <script src="assets/js/game.js"></script>
-    <script src="assets/js/myscreen.js"></script>
-    <script src="assets/js/ball.js"></script>
+    <script src="js/libs/three.js"></script>
+    <script src="js/libs/physi.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="js/libs/OrbitControls.js"></script>
+    <script src="js/libs/ColladaLoader.js"></script>
     <style>
         body {
             margin: 0;
@@ -40,19 +34,25 @@
     Vers la gauche : <b>k</b><br/>
     Vers la droite : <b>m</b><br/>
     <span>Ouvrir le chat : touche <b>C</b></span><br/><br/>
-    <span id="missingPlayer" style="display: none;color:red">Il manque le second joueur</span><br>
 
-    <h3 id="message" style="display: none; color:green">A vous de jouer !</h3>
+    <span id="missingPlayer" style="display: none;color:red">Il manque le second joueur</span><br>
+    <h3 id="yourTurnMessage" style="display: none; color:green">A vous de jouer !</h3>
     <span>Si ce n'est pas à vous de jouer, c'est à l'autre ...</span>
 </div>
 
 <div id="score" style="position: absolute">
     <p>Cups restantes : <span id="nbcups">10</span></p>
-
     <p>Nombre de tirs : <span id="nbtir">0</span></p>
 </div>
 
+<script src="js/libs/jquery-1.11.1.min.js"></script>
+<script src="js/whenMyKeyIsPressed.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/game.js"></script>
+<script src="js/myscreen.js"></script>
+<script src="js/ball.js"></script>
 <script src="http://webservice.ovh:8001/socket.io/socket.io.js"></script>
+<script src="js/network/socket.js"></script>
 <script>
     'use strict';
 
@@ -65,51 +65,10 @@
     var canPlay = false;
 
     $(document).ready(function () {
-        socket = io('http://webservice.ovh:8001');
         myScreen = new MyScreen();
         scene = new Scene();
         scene.create();
         game = new Game();
-
-        socket.on('canPlay', function (bool) {
-            canPlay = eval(bool);
-            if(canPlay){
-                $('#message').show();
-                game.init();
-            }
-        });
-
-        socket.on('nickname', function (nick) {
-            $('#commande').append($('<p>').text(
-                    'Votre identifiant : ' + nick
-            ))
-        });
-
-        socket.on('oNick', function (nick) {
-            $('#commande').append($('<p>').text(
-                    'Adversaire : ' + nick
-            ));
-        });
-
-        socket.on('players', function (nb) {
-            if (parseInt(nb) < 2) {
-                $('#missingPlayer').show();
-            } else {
-                $('#missingPlayer').hide();
-            }
-        });
-
-        socket.on('velocity', function (velocity) {
-            ball.initWithPos({x: 0, y: 15, z: -44});
-            velocity = JSON.parse(velocity);
-            ball.launch({x: -velocity.x, y: velocity.y, z: -velocity.z});
-            game.unPause();
-        });
-
-        socket.on('cupToRemove', function (index) {
-            game.removeMyCup(index);
-            game.init();
-        });
 
         myScreen.initGameMenu();
         myScreen.addStatsObject();
@@ -118,7 +77,7 @@
     });
 
     function render() {
-        game.play();
+        game.run();
 
         myScreen.updateStats();
         cameraControl.update();
@@ -127,7 +86,7 @@
     }
 
     $(document).keypress(function (e) {
-        if (!ball.isLaunched) {
+        if (!ball.isLaunched && canPlay) {
             playWhenMyKeyIsPressed(e);
         }
         doThingsWhenMyKeyIsPressed(e);

@@ -34,7 +34,6 @@ MyScreen.prototype.updateStats = function () {
 };
 
 MyScreen.prototype.initGameMenu = function () {
-
     $('#commande').css({
         "right": (window.innerWidth - this.div.width() - 50) + "px",
         "top": "30px",
@@ -69,6 +68,10 @@ MyScreen.prototype.randomPowerCursor = function () {
     }
 };
 
-MyScreen.prototype.updateTheCounterOfDeletedCup = function () {
+MyScreen.prototype.decrementDeletedCupCounter = function () {
     $("#nbcups").text($("#nbcups").text() - 1);
+};
+
+MyScreen.prototype.incrementShotCounter = function () {
+    $('#nbtir').text(parseInt($('#nbtir').text()) + 1);
 };

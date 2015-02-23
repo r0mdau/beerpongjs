@@ -1,3 +1,5 @@
+'use strict';
+
 var io = require('socket.io').listen(8000);
 
 var usernames = {};

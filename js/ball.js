@@ -10,20 +10,19 @@ function Ball() {
     this.isLaunched = false;
 }
 
-Ball.prototype.init = function () {
+Ball.prototype.reset = function () {
     this.position.set(0, 15, 20);
     this.isLaunched = false;
     scene.add(this);
 };
 
-Ball.prototype.initWithPos = function(vector){
+Ball.prototype.resetAtPosition = function(vector){
     this.position.set(vector.x, vector.y, vector.z);
     this.isLaunched = false;
     scene.add(this);
 };
 
 Ball.prototype.launch = function(velocity){
-    this.lastVelocity = velocity;
     this.setLinearVelocity(velocity);
 };
 
@@ -33,11 +32,11 @@ Ball.prototype.isInCup = function (cup) {
     && this.position.y < 3;
 };
 
-Ball.prototype.isOverTable = function () {
-    return this.position.x > scene.table.position.x - (scene.table.geometry.parameters.width / 2) - 5
-    && this.position.x < scene.table.position.x + (scene.table.geometry.parameters.width / 2) + 5
-    && this.position.z > scene.table.position.z - (scene.table.geometry.parameters.height / 2) - 5
-    && this.position.z < scene.table.position.z + (scene.table.geometry.parameters.height / 2) + 5;
+Ball.prototype.isOverTable = function (table) {
+    return this.position.x > table.position.x - (table.geometry.parameters.width / 2) - 5
+    && this.position.x < table.position.x + (table.geometry.parameters.width / 2) + 5
+    && this.position.z > table.position.z - (table.geometry.parameters.height / 2) - 5
+    && this.position.z < table.position.z + (table.geometry.parameters.height / 2) + 5;
 };
 
 Ball.prototype.isStopped = function () {

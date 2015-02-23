@@ -1,17 +1,10 @@
 'use strict';
 
 function playWhenMyKeyIsPressed(event) {
-    if (canPlay) {
-        if (event.keyCode == 13) { // enter
-            $('#message').hide();
-
-            $('#nbtir').text(parseInt($('#nbtir').text()) + 1);
-
-            var velocity = {x: $('#direction').val(), y: 2, z: -$('#puissance').val()};
-            socket.emit('velocity', JSON.stringify(velocity));
-            ball.launch(velocity);
-            game.unPause();
-        }
+    if (event.keyCode == 13) { // enter
+        var velocity = {x: $('#direction').val(), y: 2, z: -$('#puissance').val()};
+        $('#yourTurnMessage').hide();
+        game.launchBall(velocity);
     }
 }
 
