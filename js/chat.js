@@ -21,8 +21,6 @@ $(function() {
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
 
-    var socket = io('http://webservice.ovh:8000');
-
     function addParticipantsMessage (data) {
         var message = '';
         if (data.numUsers === 1) {

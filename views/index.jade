@@ -1,0 +1,103 @@
+doctype html
+html
+    head(lang="fr")
+    title beerpongJs
+    meta(charset="utf-8")
+    link(rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu")
+    script(src="/js/libs/three.js")
+    script(src="/js/libs/physi.js")
+    script(src="/js/libs/stats.min.js")
+    script(src="/js/libs/OrbitControls.js")
+    script(src="/js/libs/ColladaLoader.js")
+    style.
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    body
+        canvas(id="myCanvas" width="350" height="350" style="display:none")
+        div(id="control" style="position:absolute")
+            p Direction :
+            input(type="range" id="direction" value="0" min="-7", max="7")
+            p Puissance :
+            input(type="range" id="puissance" value="35" min="20" max ="50")
+            br
+        div(id="commande" style="position:absolute")
+            h2 Commandes
+            span Lancer la balle :
+                b Entrée
+            br
+            | Vers la gauche :
+            b k
+            br
+            | Vers la droite :
+            b m
+            br
+            span Ouvrir le chat : touche
+            b C
+            br
+            br
+            span(is="missingPlayer" style="display: none;color:red") Il manque le second joueur
+            br
+            h3(id="yourTurnMessage" style="display: none; color:green") A vous de jouer !
+            span Si ce n'est pas à vous de jouer, c'est à l'autre
+        div(id="score" style="position: absolute")
+            p Cups restantes :
+                span(id="nbcups") 10
+            p Nombre de tirs :
+                span(id="nbtir") 0
+
+        script(src="/js/libs/jquery-1.11.1.min.js")
+        script(src="/js/whenMyKeyIsPressed.js")
+        script(src="/js/scene.js")
+        script(src="/js/game.js")
+        script(src="/js/myscreen.js")
+        script(src="/js/ball.js")
+        script(src="#{env.protocol}://#{env.uri}/socket.io/socket.io.js")
+        script.
+            'use strict';
+
+            var game, myScreen;
+            var renderer;
+            var scene;
+            var camera, cameraControl;
+            var cup, ball;
+            var socket;
+            var canPlay = false;
+
+            $(document).ready(function () {
+            socket = io('#{env.protocol}://#{env.uri}');
+            myScreen = new MyScreen();
+            scene = new Scene();
+                scene.create();
+            game = new Game();
+
+                myScreen.initGameMenu();
+                myScreen.addStatsObject();
+                document.body.appendChild(renderer.domElement);
+                render();
+            });
+
+            function render() {
+                game.run();
+
+                myScreen.updateStats();
+                cameraControl.update();
+                requestAnimationFrame(render);
+                renderer.render(scene, camera);
+            }
+
+            $(document).keypress(function (e) {
+                if (!ball.isLaunched && canPlay) {
+                    playWhenMyKeyIsPressed(e);
+            }
+                doThingsWhenMyKeyIsPressed(e);
+            });
+
+            $(window).resize(function () {
+                myScreen.initGameMenu();
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        script(src="/js/network/socket.js")

@@ -1,0 +1,21 @@
+doctype html
+html
+    head(lang="en")
+        meta(charset="utf-8")
+        title="beerpongJs chat"
+        link(rel="stylesheet" href="/assets/css/chat.css")
+    body
+        ul(class="pages")
+            li(class="chat page")
+                div(class="chatArea")
+                    ul(class="messages")
+                input(class="inputMessage" placeholder="Dites quelque chose...")
+            li(class="login page")
+                div(class="form")
+                    h3(class="title")="Votre Pseudo ?"
+                    input(class="usernameInput" type="text" maxlength="14")
+        script(src="https://code.jquery.com/jquery-1.10.2.min.js")
+        script(src="#{env.protocol}://#{env.uri}/socket.io/socket.io.js")
+        script.
+            var socket = io('#{env.protocol}://#{env.uri}/chat');
+        script(src="/js/chat.js")

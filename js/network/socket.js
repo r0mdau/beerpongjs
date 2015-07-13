@@ -1,7 +1,6 @@
 'use strict';
 
 $(document).ready(function(){
-    socket = io('http://webservice.ovh:8001');
     socket.on('canPlay', function (bool) {
         canPlay = eval(bool);
         if(canPlay){

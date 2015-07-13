@@ -23,7 +23,7 @@ function doThingsWhenMyKeyIsPressed(event) {
             dir.val(dirVal + 1);
         }
     } else if (keyMap("c", event)) {
-        window.open('chat.html', 'beerpongjs chat', 'menubar=no, scrollbars=no, top=100, left=100, width=500, height=300');
+        window.open('/chat', 'beerpongjs chat', 'menubar=no, scrollbars=no, top=100, left=100, width=500, height=300');
     }
 }
 

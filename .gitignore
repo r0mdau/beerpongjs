@@ -21,3 +21,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 ### End ignore OSX ###
+.idea/
+node_modules/
