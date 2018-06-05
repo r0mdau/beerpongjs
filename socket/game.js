@@ -42,7 +42,8 @@ exports.launch = function (io) {
         socket.emit('players', pairOfPlayers(socket.id));
         socket.broadcast.to(players[socket.id].associatedId).emit('players', pairOfPlayers(socket.id));
 
-        console.log(socket.id + ' : connected');
+	var date = new Date();
+        console.log(date.toString() + " - " + socket.id + ' : connected');
 
         socket.on('velocity', function (msg) {
             if (players[this.id].canPlay && players[this.id].associatedId) {
@@ -72,7 +73,8 @@ exports.launch = function (io) {
             }
             delete players[this.id];
 
-            console.log(this.id + ' : disconnected');
+            var date = new Date();
+            console.log(date.toString() + " - " + this.id + ' : disconnected');
         });
     });
 };
