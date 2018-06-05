@@ -1,3 +1,3 @@
 exports.protocol = 'http';
-exports.uri = 'beerpong-multi.dev';
+exports.uri = 'beerpong.romaindauby.fr';
 exports.port = '8001';
